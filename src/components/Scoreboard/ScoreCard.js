@@ -7,7 +7,9 @@ export default class ScoreCard extends React.Component {
 			<div className="scoreboard__card">
 				<div className="scoreboard__serving-container">
 					{this.props.isServing ? 
-						<div className="scoreboard__serving"></div>
+						<div className="scoreboard__serving">
+							Serving
+						</div>
 					: ``}
 				</div>
 				<div className="scoreboard__name">

@@ -153,12 +153,6 @@ export default class Scoreboard extends React.Component {
 	render() {
 		return (
 			<div className="scoreboard">
-				{this.state.gameState === 'gameOver' ? 
-					<div className="scoreboard__gameover">
-						<h2>GAME OVER</h2>
-						<p>{this.state.winner} wins!</p>
-					</div>
-				: ``}
 				<ScoreCard 
 					name={this.state.home.name} 
 					score={this.state.home.score} 
@@ -167,6 +161,12 @@ export default class Scoreboard extends React.Component {
 					name={this.state.away.name} 
 					score={this.state.away.score} 
 					isServing={this.state.away.isServing} />
+				{this.state.gameState === 'gameOver' ? 
+					<div className="scoreboard__gameover">
+						<h2>GAME OVER</h2>
+						<p>{this.state.winner} wins!</p>
+					</div>
+				: ``}
 			</div>
 		);
 	}
