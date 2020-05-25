@@ -1,7 +1,39 @@
 .scoreboard{
 	display: flex;
 
+	&__gameover{
+		position: fixed;
+		background-color: $white;
+		border: $border;
+		width: 500px;
+		height: 200px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
 	&__card{
 		flex: 1;
+	}
+
+	&__serving-container{
+		height: 10px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__serving{
+		height: 10px;
+		width: 10px;
+		background-color: $black;
+		border-radius: 50%;
 	}
 }
