@@ -6,7 +6,8 @@ export default class Scoreboard extends React.Component {
 	constructor(props) {
 		super(props);
 
-		//For now, it picks who starts serving randomly
+		//* For now, it picks who starts serving randomly
+		//TODO Add setup screen to choose these things
 		let isHomeServing = true;
 		
 		if(Math.random() >= 0.5){
@@ -16,6 +17,9 @@ export default class Scoreboard extends React.Component {
 		//* Official rules state rotating every:
 		//* 2 points for 11 point games
 		//* 5 points for 21 point games
+
+		//* We play 5 points for 11 point games
+		//* That will be the default until I can convince them otherwise
 		const winScore = {
 			official: 11,
 			longPlay: 21,
@@ -61,19 +65,18 @@ export default class Scoreboard extends React.Component {
 
 	handleKeyPress = (event) => {
 		if(this.state.gameState !== 'gameOver'){
-
 			//* Home team scoring is mapped to the Z button
 			//* Away team is mapped to P button
 			if(event.key === 'z'){
-				console.log('Home Scores!')
 				this.nextPlay('home')
 				
 			}else if(event.key === 'p'){
-				console.log('Away Scores!')
 				this.nextPlay('away')
 			}
-			
 		}
+
+		//TODO Add reset functionality
+		//TODO Add referee/admin code to make ingame changes
 	}
 
 	//This processes the current play and starts the next play
@@ -82,26 +85,26 @@ export default class Scoreboard extends React.Component {
 
 		newState = this.incrementPlays(newState);
 
+		//Gives the point to whoever got it
 		if(whoScored === 'home'){
 			newState.home.score++;
 		}else if(whoScored === 'away'){
 			newState.away.score++;
 		}
 
+		//Checks if we need to go into overtime
 		if(this.checkForOvertime(newState)){
 			newState.gameState = 'overtime';
 		}
 
+		//Checks if someone has won, and if so, does win state setup
 		newState = this.checkForWinner(newState);
 
-
-		//console.log(newState);
-		
 		this.setState(newState);
 	}
 
 	incrementPlays(state) {
-		//* Adds a play and decides if we need to switch servers
+		// Adds a play and decides if we need to switch servers
 		//* A play is not considered happened until someone scores
 		
 		state.plays++;
@@ -129,13 +132,15 @@ export default class Scoreboard extends React.Component {
 
 	checkForWinner(state) {
 		let winner = '';
+
+		//If it's overtime, the win conditions are different
 		if(state.gameState === 'overtime'){
 			if(state.home.score - state.away.score >= 2){
 				winner = state.home.name;
 			}else if(state.away.score - state.home.score >= 2){
 				winner = state.away.name;
 			}
-		}else{
+		}else{ //Regular win conditions
 			if(state.home.score === state.winScore){
 				winner = state.home.name;
 			}else if(state.away.score === state.winScore){
@@ -147,6 +152,8 @@ export default class Scoreboard extends React.Component {
 			state.winner = winner;
 			state.gameState = 'gameOver';
 
+			//Sends the game results to the backend api
+			//Logs the response to the console
 			sendGameReport(state)
 				.then(msg => console.log(msg))
 				.catch(err => console.log(err));
@@ -167,6 +174,7 @@ export default class Scoreboard extends React.Component {
 					name={this.state.away.name} 
 					score={this.state.away.score} 
 					isServing={this.state.away.isServing} />
+					
 				{this.state.gameState === 'gameOver' ? 
 					<div className="scoreboard__gameover">
 						<h1>GAME OVER</h1>

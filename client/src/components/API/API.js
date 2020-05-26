@@ -1,5 +1,7 @@
 import apiInfo from '../../config';
 
+// For now, get's back a message to test api
+// TODO Have api return info that we actually need for stats/player login
 export const callApi = async () => {
 	const response = await fetch('/api/hello');
 	const body = await response.json();
@@ -9,7 +11,7 @@ export const callApi = async () => {
 	return body;
 };
 
-
+// Sends the game results to the server to log in the DB
 export const sendGameReport = async (state) => {
 	state.token = apiInfo.serverToken;
 
