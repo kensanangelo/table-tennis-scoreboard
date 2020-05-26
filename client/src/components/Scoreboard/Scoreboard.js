@@ -1,5 +1,6 @@
 import React from "react";
 import ScoreCard from './ScoreCard';
+import { sendGameReport } from '../API/API';
 
 export default class Scoreboard extends React.Component {
 	constructor(props) {
@@ -48,6 +49,15 @@ export default class Scoreboard extends React.Component {
 			}
 		};
 	}
+	
+	componentDidMount() {
+		document.addEventListener("keydown", this.handleKeyPress, false);
+	}
+
+	componentWillUnmount(){
+		document.removeEventListener("keydown", this.handleKeyPress, false);
+	}
+	
 
 	handleKeyPress = (event) => {
 		if(this.state.gameState !== 'gameOver'){
@@ -85,7 +95,7 @@ export default class Scoreboard extends React.Component {
 		newState = this.checkForWinner(newState);
 
 
-		console.log(newState);
+		//console.log(newState);
 		
 		this.setState(newState);
 	}
@@ -114,7 +124,6 @@ export default class Scoreboard extends React.Component {
 			return true;
 		}
 		
-
 		return false;
 	}
 
@@ -137,17 +146,12 @@ export default class Scoreboard extends React.Component {
 		if(winner !== ''){
 			state.winner = winner;
 			state.gameState = 'gameOver';
+
+			console.log(sendGameReport(state));
 		}
 
 
 		return state;
-	}
-
-	componentDidMount(){
-		document.addEventListener("keydown", this.handleKeyPress, false);
-	}
-	componentWillUnmount(){
-		document.removeEventListener("keydown", this.handleKeyPress, false);
 	}
 
 	render() {
