@@ -51,11 +51,11 @@ export default class Scoreboard extends React.Component {
 	}
 	
 	componentDidMount() {
-		document.addEventListener("keydown", this.handleKeyPress, false);
+		document.addEventListener("keyup", this.handleKeyPress, false);
 	}
 
 	componentWillUnmount(){
-		document.removeEventListener("keydown", this.handleKeyPress, false);
+		document.removeEventListener("keyup", this.handleKeyPress, false);
 	}
 	
 
@@ -147,7 +147,9 @@ export default class Scoreboard extends React.Component {
 			state.winner = winner;
 			state.gameState = 'gameOver';
 
-			console.log(sendGameReport(state));
+			sendGameReport(state)
+				.then(msg => console.log(msg))
+				.catch(err => console.log(err));
 		}
 
 
@@ -167,7 +169,7 @@ export default class Scoreboard extends React.Component {
 					isServing={this.state.away.isServing} />
 				{this.state.gameState === 'gameOver' ? 
 					<div className="scoreboard__gameover">
-						<h2>GAME OVER</h2>
+						<h1>GAME OVER</h1>
 						<p>{this.state.winner} wins!</p>
 					</div>
 				: ``}
