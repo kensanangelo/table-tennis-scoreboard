@@ -1,3 +1,4 @@
+const config = require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -8,18 +9,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/api/hello', (req, res) => {
-   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-   res.send({ express: 'Hello From Express' });
+   sendResponse(res, { express: 'Test Request' });
 });
 
 app.post('/api/submit-game', (req, res) => {
-   console.log(req.body.winner);
-   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-   res.send(
-		`I received your POST request. This is what you sent me:`,
-   );
+
+   if(req.body.token === config.serverToken){
+      sendResponse(res, {message: `I received your POST request.`});
+   }else{
+      res.status(501)
+         .send({message: 'Bad token. Permission denied'});
+   }
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+const sendResponse = (res, data) => {
+   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.send(data);
+}
