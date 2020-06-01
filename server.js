@@ -1,12 +1,18 @@
 const config = require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
+var path = require("path");
 
 const app = express();
 const port = process.env.PORT || 5000;
+app.use('/client/build', express.static(__dirname + '/client/build'))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/', function(req, res) {
+   res.sendFile(__dirname + '/client/build/index.html')
+});
 
 app.get('/api/hello', (req, res) => {
    // For now, returns a success message
