@@ -1,15 +1,16 @@
 const config = require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
-var path = require("path");
+const path = require("path");
 const app = express();
 const port = process.env.PORT || 5000;
-
-//Sets build folder public so client can access js and css files
-app.use('/client/build', express.static(__dirname + '/client/build'))
+const utils = require("./utils")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//Sets build folder public so client can access js and css files
+app.use('/client/build/static', express.static(__dirname + '/client/build/static'))
 
 // Connects to DB
 //* All of the API calls that need the DB go in here
@@ -21,11 +22,26 @@ MongoClient.connect(config.connectionString, {
    console.log('Connected to Database')
 
    const db = client.db('scoreboard')
+   const playersCollection = db.collection('players')
+   const gamesCollection = db.collection('games')
 
    app.post('/api/submit-game', (req, res) => {
       //Checks if client sent correct token
       if(req.body.token === config.serverToken){
-         sendResponse(res, {message: `I received your POST request.`});
+
+         utils.submitGametoDB(gamesCollection, req.body)
+         .then(response => {
+   
+            if(response === '200'){
+               utils.sendResponse(res, {status: 200, message: `Game saved correctly.`});
+            }else{
+               res.status(500)
+               .send({message: 'DB Insertion Failed. Reason: ' + response.errmsg});
+            }
+
+         });
+
+
       }else{
          res.status(501)
             .send({message: 'Bad token. Permission denied'});
@@ -33,22 +49,13 @@ MongoClient.connect(config.connectionString, {
    });
  })
 
+app.get('/api/hello', (req, res) => {
+   //* This is used to hit up the API to make sure it's responding correctly
+   utils.sendResponse(res, { express: 'Request Successful. The API is running' });
+});
+
 app.get('/', function(req, res) {
    res.sendFile(__dirname + '/client/build/index.html')
 });
 
-app.get('/api/hello', (req, res) => {
-   // For now, returns a success message
-   // TODO return useful info from DB
-   sendResponse(res, { express: 'Request Successful. The API is running' });
-});
-
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
-//Builds and sends successful response
-//Includes CORS header because Chrome is a poopface if we don't
-const sendResponse = (res, data) => {
-   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-   res.send(data);
-}

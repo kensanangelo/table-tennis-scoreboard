@@ -1,0 +1,5 @@
+{
+	"serverToken": "102nf238971",
+	"connectionString": "mongodb+srv://<USERNAME>:<PASSWORD>@<MONGO_URL>"
+
+}
