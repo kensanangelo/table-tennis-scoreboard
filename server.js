@@ -35,16 +35,14 @@ MongoClient.connect(config.connectionString, {
             if(response === '200'){
                utils.sendResponse(res, {status: 200, message: `Game saved correctly.`});
             }else{
-               res.status(500)
-               .send({message: 'DB Insertion Failed. Reason: ' + response.errmsg});
+               utils.sendError(res, 500, {message: 'DB Insertion Failed. Reason: ' + response.errmsg})
             }
 
          });
 
 
       }else{
-         res.status(501)
-            .send({message: 'Bad token. Permission denied'});
+         utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
       }
    });
  })
