@@ -29,3 +29,30 @@ export const sendGameReport = async (state) => {
 	
 	return body.message;
 };
+
+
+// Gets all available players
+export const getPlayers = async () => {
+	const data = {
+		token: apiInfo.serverToken
+	};
+
+	const response = await fetch(apiInfo.playersUrl, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+
+	if(response.ok){
+		const body = await response.json();
+		
+		if (response.status !== 200) throw Error(body.message);
+
+		return body.players;
+	}else{
+		throw Error(response.statusText)
+	}
+	
+};

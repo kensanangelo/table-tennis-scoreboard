@@ -1,6 +1,6 @@
 import React from "react";
 import ScoreCard from './ScoreCard';
-import { sendGameReport } from '../API/API';
+import { sendGameReport, getPlayers } from '../API/API';
 
 export default class Scoreboard extends React.Component {
 	constructor(props) {
@@ -31,15 +31,17 @@ export default class Scoreboard extends React.Component {
 		};
 
 		//* Gamestate can be:
+		//* setup
 		//* playing
 		//* overtime
 		//* gameover
 
 		this.state = {
+			players: [],
 			winScore: winScore.official,
 			serveChangeLimit: servingRotation.longPlay,
 			plays: 0,
-			gameState: 'playing',
+			gameState: 'setup',
 			winner: '',
 			home: {
 				name: 'Home',
@@ -56,6 +58,14 @@ export default class Scoreboard extends React.Component {
 	
 	componentDidMount() {
 		document.addEventListener("keyup", this.handleKeyPress, false);
+
+		let newState = this.state;
+		
+		getPlayers()
+		.then(players => {
+			newState.players = players;
+			this.setState(newState);
+		});
 	}
 
 	componentWillUnmount(){
@@ -164,23 +174,65 @@ export default class Scoreboard extends React.Component {
 	}
 
 	render() {
+		const hasPlayers = this.state.players.length !== 0;
+							
 		return (
 			<div className="scoreboard">
-				<ScoreCard 
-					name={this.state.home.name} 
-					score={this.state.home.score} 
-					isServing={this.state.home.isServing} />
-				<ScoreCard 
-					name={this.state.away.name} 
-					score={this.state.away.score} 
-					isServing={this.state.away.isServing} />
-					
-				{this.state.gameState === 'gameOver' ? 
-					<div className="scoreboard__gameover">
-						<h1>GAME OVER</h1>
-						<p>{this.state.winner} wins!</p>
+				{this.state.gameState === 'setup' ? 
+					<div className="scoreboard__setup">
+						<h1 className="setup__header">Enter players</h1>
+						<div className="setup__players">
+							<div className="setup__player setup__player--home">
+								<h2 className="setup__player-header">Home</h2>
+								{hasPlayers ? 
+									<select id="home-player">
+									{this.state.players.map(
+										(player) => {
+											return <option 
+												key={player.player_id} 
+												value={player.player_id}>
+													{player.name}
+											</option>
+										})}
+									</select>
+								: `No players available`}
+							</div>
+							<div className="setup__player setup__player--away">
+								<h2 className="setup__player-header">Away</h2>
+								{hasPlayers ? 
+									<select id="away-player">
+									{this.state.players.map(
+										(player) => {
+											return <option 
+												key={player.player_id} 
+												value={player.player_id}>
+													{player.name}
+											</option>
+										})}
+									</select>
+								: `No players available`}
+							</div>
+						</div>
 					</div>
-				: ``}
+				: 
+				<>
+					<ScoreCard 
+						name={this.state.home.name} 
+						score={this.state.home.score} 
+						isServing={this.state.home.isServing} />
+					<ScoreCard 
+						name={this.state.away.name} 
+						score={this.state.away.score} 
+						isServing={this.state.away.isServing} />
+
+					{this.state.gameState === 'gameOver' ? 
+						<div className="scoreboard__gameover">
+							<h1>GAME OVER</h1>
+							<p>{this.state.winner} wins!</p>
+						</div>
+					: ``}
+				</>
+				}
 			</div>
 		);
 	}

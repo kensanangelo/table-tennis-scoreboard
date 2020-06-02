@@ -52,7 +52,7 @@ MongoClient.connect(config.connectionString, {
 
          utils.getPlayers(playersCollection)
          .then(players => {
-            utils.sendResponse(res, {players: players});
+            utils.sendResponse(res, {status: 200, players: players});
          });
 
       }else{
