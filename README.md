@@ -15,6 +15,7 @@ Built on the MERN stack, this will be run on a Raspberry Pi on the TV next to th
 - Set up game start screen
 	- Players
 	- Who starts serving
+	- Is exhibition game (Home vs Away only, no saving)
 	- How many points to win?
 - Set up other controls (maybe 'Hold R to reset game' or 'Press D+E+V for admin', etc)
 - Style UI (Rob is designing)
