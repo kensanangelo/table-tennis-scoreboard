@@ -45,7 +45,33 @@ MongoClient.connect(config.connectionString, {
          utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
       }
    });
- })
+
+   app.post('/api/get-players', (req, res) => {
+      //Checks if client sent correct token
+      if(req.body.token === config.serverToken){
+
+         utils.getPlayers(playersCollection)
+         .then(players => {
+            utils.sendResponse(res, {players: players});
+         });
+
+      }else{
+         utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
+      }
+   });
+
+   //!!!!!!!!!!!!!!!!!!
+   // TODO DELETE THIS
+   //!!!!!!!!!!!!!!!!!!
+   app.get('/api/player-check', (req, res) => {
+
+      utils.getPlayers(playersCollection)
+      .then(players => {
+         utils.sendResponse(res, {players: players});
+      })
+      
+   });
+})
 
 app.get('/api/hello', (req, res) => {
    //* This is used to hit up the API to make sure it's responding correctly

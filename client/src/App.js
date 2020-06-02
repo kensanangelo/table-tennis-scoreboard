@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './styles/App.scss';
 import Clock from './components/Clock/Clock';
 import Scoreboard from './components/Scoreboard/Scoreboard';

@@ -1,6 +1,5 @@
 module.exports = {
 	submitGametoDB: async function (gamesCollection, rawData) {
-		console.log(rawData);
 		
 		const insertData = {
 			plays: rawData.plays,
@@ -19,8 +18,22 @@ module.exports = {
 			const result = await gamesCollection.insertOne(insertData)
 
 			return '200';
-		}catch{
+		}catch(error){
 			console.log("GAME INSERT ERROR:");
+			console.error(error);
+
+			return error;
+		}
+	},
+
+	getPlayers: async function (playersCollection){
+		try{
+			const players = await playersCollection.find().toArray();
+			console.log(players);
+			
+			return players;
+		}catch(error){
+			console.log("Players Get ERROR:");
 			console.error(error);
 
 			return error;
