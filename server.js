@@ -75,7 +75,7 @@ MongoClient.connect(config.connectionString, {
 
 app.get('/api/hello', (req, res) => {
    //* This is used to hit up the API to make sure it's responding correctly
-   utils.sendResponse(res, { express: 'Request Successful. The API is running' });
+   utils.sendResponse(res, { msg: 'Connected to API' });
 });
 
 app.get('/', function(req, res) {

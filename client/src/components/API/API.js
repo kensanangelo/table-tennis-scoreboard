@@ -8,7 +8,7 @@ export const callApi = async () => {
 	
 	if (response.status !== 200) throw Error(body.message);
 	
-	return body;
+	return body.msg;
 };
 
 // Sends the game results to the server to log in the DB
