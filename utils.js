@@ -3,12 +3,17 @@ module.exports = {
 		
 		const insertData = {
 			plays: rawData.plays,
-			winner: rawData.winner,
+			winner: {
+				player_id: rawData.winner.id,
+				name: rawData.winner.name
+			},
 			home: {
+				player_id: rawData.home.id,
 				name: rawData.home.name,
 				score: rawData.home.score,
 			},
 			away: {
+				player_id: rawData.away.id,
 				name: rawData.away.name,
 				score: rawData.away.score
 			}

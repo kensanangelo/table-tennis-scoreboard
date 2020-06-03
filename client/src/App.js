@@ -12,11 +12,11 @@ function App() {
     players: {
       home: {
         id: '',
-        name: ''
+        name: 'Home'
       },
       away: {
         id: '',
-        name: ''
+        name: 'Away'
       }
     }
   }
@@ -29,7 +29,7 @@ function App() {
       {state.gameState === 'setup' ? 
         <Setup changeGamestate={p=>{setState(p)}} />
       :
-        <Scoreboard />
+        <Scoreboard players={state.players}/>
       }
     </div>
   );

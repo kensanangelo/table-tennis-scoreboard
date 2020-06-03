@@ -37,19 +37,23 @@ export default class Scoreboard extends React.Component {
 		//* gameover
 
 		this.state = {
-			players: [],
 			winScore: winScore.official,
 			serveChangeLimit: servingRotation.longPlay,
 			plays: 0,
 			gameState: 'playing',
-			winner: '',
+			winner: {
+				id: 0,
+				name: ''
+			},
 			home: {
-				name: 'Home',
+				id: props.players.home.id,
+				name: props.players.home.name,
 				score: 0,
 				isServing: isHomeServing,
 			},
 			away: {
-				name: 'Away',
+				id: props.players.away.id,
+				name: props.players.away.name,
 				score: 0,
 				isServing: !isHomeServing,
 			}
@@ -133,24 +137,37 @@ export default class Scoreboard extends React.Component {
 	}
 
 	checkForWinner(state) {
-		let winner = '';
+		function setWinner(player){
+			let result = {
+				id: player.id,
+				name: player.name
+			};
+	
+			return result;
+		}
+
+
+		let winner = {
+			id: '',
+			name: ''
+		};
 
 		//If it's overtime, the win conditions are different
 		if(state.gameState === 'overtime'){
 			if(state.home.score - state.away.score >= 2){
-				winner = state.home.name;
+				winner = setWinner(state.home);
 			}else if(state.away.score - state.home.score >= 2){
-				winner = state.away.name;
+				winner = setWinner(state.away);
 			}
 		}else{ //Regular win conditions
 			if(state.home.score === state.winScore){
-				winner = state.home.name;
+				winner = setWinner(state.home);
 			}else if(state.away.score === state.winScore){
-				winner = state.away.name;
+				winner = setWinner(state.away);
 			}
 		}
 
-		if(winner !== ''){
+		if(winner.name !== ''){
 			state.winner = winner;
 			state.gameState = 'gameOver';
 
@@ -180,7 +197,7 @@ export default class Scoreboard extends React.Component {
 				{this.state.gameState === 'gameOver' ? 
 					<div className="scoreboard__gameover">
 						<h1>GAME OVER</h1>
-						<p>{this.state.winner} wins!</p>
+						<p>{this.state.winner.name} wins!</p>
 					</div>
 				: ``}
 			</div>
