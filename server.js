@@ -9,7 +9,7 @@ const utils = require("./utils")
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Sets build folder public so client can access js and css files
+//Sets static folder public so client can access js and css files
 app.use('/client/build/static', express.static(__dirname + '/client/build/static'))
 
 // Connects to DB
@@ -59,18 +59,6 @@ MongoClient.connect(config.connectionString, {
          utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
       }
    });
-
-   //!!!!!!!!!!!!!!!!!!
-   // TODO DELETE THIS
-   //!!!!!!!!!!!!!!!!!!
-   app.get('/api/player-check', (req, res) => {
-
-      utils.getPlayers(playersCollection)
-      .then(players => {
-         utils.sendResponse(res, {players: players});
-      })
-      
-   });
 })
 
 app.get('/api/hello', (req, res) => {
@@ -78,6 +66,9 @@ app.get('/api/hello', (req, res) => {
    utils.sendResponse(res, { msg: 'Connected to API' });
 });
 
+//! Maybe delete this?
+//! Depends on if client can access server to get client files 
+//! or if they have to be on comp separately
 app.get('/', function(req, res) {
    res.sendFile(__dirname + '/client/build/index.html')
 });

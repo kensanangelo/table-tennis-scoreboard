@@ -76,7 +76,6 @@ export default class Scoreboard extends React.Component {
 		}
 
 		//TODO Add reset functionality
-		//TODO Add referee/admin code to make ingame changes
 	}
 
 	//This processes the current play and starts the next play
@@ -110,6 +109,7 @@ export default class Scoreboard extends React.Component {
 		state.plays++;
 
 		if (state.plays % state.serveChangeLimit === 0) {
+			// Switches server
 			state.home.isServing = !state.home.isServing;
 			state.away.isServing = !state.away.isServing;
 		}
@@ -131,6 +131,7 @@ export default class Scoreboard extends React.Component {
 	}
 
 	checkForWinner(state) {
+		//Formats winner for adding to state
 		function setWinner(player){
 			let result = {
 				id: player.id,
@@ -164,6 +165,7 @@ export default class Scoreboard extends React.Component {
 			state.winner = winner;
 			state.gameState = 'gameOver';
 
+			// Only saves game results if we aren't in a practice round
 			if(state.gameMode === 'standard'){
 				//Sends the game results to the backend api
 				//Logs the response to the console

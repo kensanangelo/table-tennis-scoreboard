@@ -1,7 +1,6 @@
 import apiInfo from '../../config';
 
-// For now, get's back a message to test api
-// TODO Have api return info that we actually need for stats/player login
+// Hits API to make sure we are able to reach it
 export const callApi = async () => {
 	const response = await fetch(apiInfo.checkUrl);
 	const body = await response.json();

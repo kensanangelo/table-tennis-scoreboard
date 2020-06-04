@@ -29,12 +29,17 @@ export default class Scoreboard extends React.Component {
 	componentDidMount() {
 		let newState = this.state;
 
+		// Checks to make sure we can even connect to api
+		// then displays the server message
 		callApi()
 		.then(msg => {
 			newState.serverStatus = msg;
 			
+			// If we can connect to server, fetch all players
 			getPlayers()
 			.then(availPlayers => {
+				// Set available players to state, and 
+				// sets first and last as defaults
 				newState.availablePlayers = availPlayers;
 
 				newState.players.home.id = availPlayers[0].player_id;
@@ -50,6 +55,7 @@ export default class Scoreboard extends React.Component {
 		});
 	}
 
+	// Saves home player when changed
 	onHomeChange(event){
 		let newState = this.state;
 
@@ -60,6 +66,7 @@ export default class Scoreboard extends React.Component {
       this.setState(newState);
 	}
 
+	// Saves away player when changed
 	onAwayChange(event){
 		let newState = this.state;
 
@@ -70,6 +77,7 @@ export default class Scoreboard extends React.Component {
       this.setState(newState);
 	}
 
+	// Saves who's serving when changed
 	onServingChange(event){
 		let newState = this.state;
 
@@ -84,6 +92,7 @@ export default class Scoreboard extends React.Component {
       this.setState(newState);
 	}
 
+	// Starts game and passes up all our player info
 	startGame(){
 		const curState = this.state;
 		this.props.startGame({
@@ -104,6 +113,8 @@ export default class Scoreboard extends React.Component {
 		})
 	}
 
+	// Changes the players to defaults and sets it as a practice game
+	// then starts game
 	setPracticeMode(){
 		let newState = this.state;
 
@@ -119,23 +130,25 @@ export default class Scoreboard extends React.Component {
 	}
 
 	render(){
+		const isServerConnected = this.state.serverStatus === 'Connected to API';
+
 		return (
 			<div className="setup">
-				{this.state.serverStatus === 'Connected to API' ? 
-					<p className="setup__server">
-						{this.state.serverStatus}
-					</p>
-				:
-					<p className="setup__server error-msg">
-						{this.state.serverStatus}
-					</p>
-				}
+				<p 
+					className={`setup__server
+						${isServerConnected ?
+							``:`error-msg`}
+					`}>
+					{this.state.serverStatus}
+				</p>
 				<h1 className="setup__header">Enter players</h1>
 				<div className="setup__players">
 					<div className="setup__player setup__player--home">
 						<h2 className="setup__player-header">Home</h2>
 						{this.state.availablePlayers.length !== 0 ? 
-							<select id="home-player" onChange={this.onHomeChange.bind(this)}>
+							<select 
+								id="home-player" 
+								onChange={this.onHomeChange.bind(this)}>
 							{this.state.availablePlayers.map(
 								(player) => {
 									return <option 
@@ -171,7 +184,9 @@ export default class Scoreboard extends React.Component {
 					<div className="setup__player setup__player--away">
 						<h2 className="setup__player-header">Away</h2>
 						{this.state.availablePlayers.length !== 0 ? 
-							<select id="away-player" onChange={this.onAwayChange.bind(this)}>
+							<select 
+								id="away-player" 
+								onChange={this.onAwayChange.bind(this)}>
 							{this.state.availablePlayers.slice(0).reverse().map(
 								(player) => {
 									if(this.state.players.home.id !== player.player_id){
