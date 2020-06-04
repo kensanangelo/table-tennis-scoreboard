@@ -6,13 +6,12 @@ export default class Scoreboard extends React.Component {
 	constructor(props) {
 		super(props);
 
-		//* For now, it picks who starts serving randomly
-		//TODO Add setup screen to choose these things
-		let isHomeServing = true;
+		//* Activate this if you want to randomly select who serves first
+		// let isHomeServing = true;
 		
-		if(Math.random() >= 0.5){
-			isHomeServing = false;
-		}
+		// if(Math.random() >= 0.5){
+		// 	isHomeServing = false;
+		// }
 		
 		//* Official rules state rotating every:
 		//* 2 points for 11 point games
@@ -30,12 +29,6 @@ export default class Scoreboard extends React.Component {
 			longPlay: 5,
 		};
 
-		//* Gamestate can be:
-		//* setup
-		//* playing
-		//* overtime
-		//* gameover
-
 		this.state = {
 			winScore: winScore.official,
 			serveChangeLimit: servingRotation.longPlay,
@@ -49,13 +42,13 @@ export default class Scoreboard extends React.Component {
 				id: props.players.home.id,
 				name: props.players.home.name,
 				score: 0,
-				isServing: isHomeServing,
+				isServing: props.players.home.isServing,
 			},
 			away: {
 				id: props.players.away.id,
 				name: props.players.away.name,
 				score: 0,
-				isServing: !isHomeServing,
+				isServing: props.players.away.isServing,
 			}
 		};
 	}

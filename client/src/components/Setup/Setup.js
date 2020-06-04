@@ -13,14 +13,16 @@ export default class Scoreboard extends React.Component {
 			players: {
 				home: {
 					id: '',
-					name: ''
+					name: '',
+					isServing: true,
 				},
 				away: {
 					id: '',
-					name: ''
+					name: '',
+					isServing: false,
 				}
-				}
-			};
+			}
+		};
 	}
 	
 	componentDidMount() {
@@ -48,7 +50,7 @@ export default class Scoreboard extends React.Component {
 		});
 	}
 
-	homeChange(event){
+	onHomeChange(event){
 		let newState = this.state;
 
 		const index = event.target.selectedIndex;
@@ -58,12 +60,27 @@ export default class Scoreboard extends React.Component {
       this.setState(newState);
 	}
 
-	awayChange(event){
+	onAwayChange(event){
 		let newState = this.state;
 
 		const index = event.target.selectedIndex;
 		newState.players.away.id = event.target.options[index].value;
 		newState.players.away.name = event.target.options[index].text;
+		
+      this.setState(newState);
+	}
+
+	onServingChange(event){
+		let newState = this.state;
+
+		if(event.target.value === 'home'){
+			newState.players.home.isServing = true;
+			newState.players.away.isServing = false;
+		}else if(event.target.value === 'away'){
+			newState.players.home.isServing = false;
+			newState.players.away.isServing = true;
+		}
+		console.log(newState.players);
 		
       this.setState(newState);
 	}
@@ -75,11 +92,13 @@ export default class Scoreboard extends React.Component {
 			players: {
 				home: {
 					id: curState.players.home.id,
-					name: curState.players.home.name
+					name: curState.players.home.name,
+					isServing: curState.players.home.isServing
 				},
 				away: {
 					id: curState.players.away.id,
-					name: curState.players.away.name
+					name: curState.players.away.name,
+					isServing: curState.players.away.isServing
 				}
 			}
 		})
@@ -102,7 +121,7 @@ export default class Scoreboard extends React.Component {
 					<div className="setup__player setup__player--home">
 						<h2 className="setup__player-header">Home</h2>
 						{this.state.availablePlayers.length !== 0 ? 
-							<select id="home-player" onChange={this.homeChange.bind(this)}>
+							<select id="home-player" onChange={this.onHomeChange.bind(this)}>
 							{this.state.availablePlayers.map(
 								(player) => {
 									return <option 
@@ -114,17 +133,40 @@ export default class Scoreboard extends React.Component {
 							</select>
 						: `No players available`}
 					</div>
+					<div className="setup__serving">
+						<h3 className="setup__header">Who's serving?</h3>
+						<label className="setup__label">
+							Home
+							<input 
+							type="radio" 
+							name="serving" 
+							value="home" 
+							onChange={this.onServingChange.bind(this)}
+							checked={this.state.players.home.isServing}/>
+						</label>
+						<label className="setup__label">
+							Away
+							<input 
+							type="radio" 
+							name="serving" 
+							value="away" 
+							onChange={this.onServingChange.bind(this)} 
+							checked={this.state.players.away.isServing}/>
+						</label>
+					</div>
 					<div className="setup__player setup__player--away">
 						<h2 className="setup__player-header">Away</h2>
 						{this.state.availablePlayers.length !== 0 ? 
-							<select id="away-player" onChange={this.awayChange.bind(this)}>
+							<select id="away-player" onChange={this.onAwayChange.bind(this)}>
 							{this.state.availablePlayers.slice(0).reverse().map(
 								(player) => {
-									return <option 
-										key={player.player_id} 
-										value={player.player_id}>
-											{player.name}
-									</option>
+									if(this.state.players.home.id !== player.player_id){
+										return <option 
+											key={player.player_id} 
+											value={player.player_id}>
+												{player.name}
+										</option>
+									}else return ''
 								})}
 							</select>
 						: `No players available`}

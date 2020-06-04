@@ -1,10 +1,17 @@
 .setup{
 	&__players{
 		display: flex;
+		margin-bottom: 50px;
 	}
 
 	&__player{
 		flex: 1;
+	}
+
+	&__label{
+		&:not(:last-child){
+			margin-right: 20px;
+		}
 	}
 
 	.error-msg{

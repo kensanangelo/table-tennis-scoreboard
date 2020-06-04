@@ -7,16 +7,24 @@ import Scoreboard from './components/Scoreboard/Scoreboard';
 function App() {
   // Sets up game state and players so it can be passed down 
   // into the scoreboard after setup
+
+  //* Gamestate can be:
+		//* setup
+		//* playing
+		//* overtime
+		//* gameover
   const initialState = {
     gameState: 'setup',
     players: {
       home: {
         id: '',
-        name: 'Home'
+        name: 'Home',
+        isServing: true
       },
       away: {
         id: '',
-        name: 'Away'
+        name: 'Away',
+        isServing: false
       }
     }
   }
