@@ -12,8 +12,14 @@ function App() {
 		//* setup
 		//* playing
 		//* overtime
-		//* gameover
+    //* gameover
+    
+  //* Game mode can be:
+		//* standard
+    //* practice
+    
   const initialState = {
+    gameMode: 'standard',
     gameState: 'setup',
     players: {
       home: {
@@ -35,9 +41,12 @@ function App() {
     <div className="App">
       <Clock />
       {state.gameState === 'setup' ? 
-        <Setup changeGamestate={p=>{setState(p)}} />
+        <Setup startGame={p=>{setState(p)}} />
       :
-        <Scoreboard players={state.players}/>
+        <Scoreboard 
+          players={state.players} 
+          gameMode={state.gameMode} 
+          setNewGame={()=>{setState(initialState)}}/>
       }
     </div>
   );

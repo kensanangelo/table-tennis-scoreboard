@@ -33,6 +33,7 @@ export default class Scoreboard extends React.Component {
 			winScore: winScore.official,
 			serveChangeLimit: servingRotation.longPlay,
 			plays: 0,
+			gameMode: this.props.gameMode,
 			gameState: 'playing',
 			winner: {
 				id: 0,
@@ -139,7 +140,6 @@ export default class Scoreboard extends React.Component {
 			return result;
 		}
 
-
 		let winner = {
 			id: '',
 			name: ''
@@ -164,11 +164,13 @@ export default class Scoreboard extends React.Component {
 			state.winner = winner;
 			state.gameState = 'gameOver';
 
-			//Sends the game results to the backend api
-			//Logs the response to the console
-			sendGameReport(state)
-				.then(msg => console.log(msg))
-				.catch(err => console.log(err));
+			if(state.gameMode === 'standard'){
+				//Sends the game results to the backend api
+				//Logs the response to the console
+				sendGameReport(state)
+					.then(msg => console.log(msg))
+					.catch(err => console.log(err));
+			}
 		}
 
 
@@ -191,6 +193,9 @@ export default class Scoreboard extends React.Component {
 					<div className="scoreboard__gameover">
 						<h1>GAME OVER</h1>
 						<p>{this.state.winner.name} wins!</p>
+						<button onClick={() => this.props.setNewGame()}>
+							Start New Game
+						</button>
 					</div>
 				: ``}
 			</div>

@@ -7,6 +7,7 @@ export default class Scoreboard extends React.Component {
 		super(props);
 		
 		this.state = {
+			gameMode: 'standard',
 			gameState: 'setup',
 			availablePlayers: [],
 			serverStatus: 'CANNOT CONNECT TO API',
@@ -40,7 +41,6 @@ export default class Scoreboard extends React.Component {
 				newState.players.home.name = availPlayers[0].name;
 
 				const numPlayers = availPlayers.length - 1;
-				console.log(availPlayers.length);
 				
 				newState.players.away.id = availPlayers[numPlayers].player_id;
 				newState.players.away.name = availPlayers[numPlayers].name;
@@ -80,14 +80,14 @@ export default class Scoreboard extends React.Component {
 			newState.players.home.isServing = false;
 			newState.players.away.isServing = true;
 		}
-		console.log(newState.players);
 		
       this.setState(newState);
 	}
 
-	changeGamestate(){
+	startGame(){
 		const curState = this.state;
-		this.props.changeGamestate({
+		this.props.startGame({
+			gameMode: curState.gameMode,
 			gameState: 'playing',
 			players: {
 				home: {
@@ -102,6 +102,20 @@ export default class Scoreboard extends React.Component {
 				}
 			}
 		})
+	}
+
+	setPracticeMode(){
+		let newState = this.state;
+
+		newState.gameMode = 'practice';
+		newState.players.home.name = 'Home';
+		newState.players.home.id = '';
+		newState.players.away.name = 'Away';
+		newState.players.away.id = '';
+		
+		this.setState(newState);
+		
+		this.startGame();
 	}
 
 	render(){
@@ -172,7 +186,12 @@ export default class Scoreboard extends React.Component {
 						: `No players available`}
 					</div>
 				</div>
-				<button onClick={this.changeGamestate.bind(this)}>Start Game</button>
+				<button onClick={this.startGame.bind(this)}>
+					Start Game
+				</button>
+				<button onClick={this.setPracticeMode.bind(this)}>
+					Practice Game
+				</button>
 			</div>
 	)};
 }
