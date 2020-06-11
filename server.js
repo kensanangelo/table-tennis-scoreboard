@@ -70,7 +70,13 @@ app.get('/api/hello', (req, res) => {
 //! Depends on if client can access server to get client files 
 //! or if they have to be on comp separately
 app.get('/', function(req, res) {
-   res.sendFile(__dirname + '/client/build/index.html')
+   if(req.query.token === config.serverToken){
+
+      res.sendFile(__dirname + '/client/build/index.html')
+
+   }else{
+      utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
+   }
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
