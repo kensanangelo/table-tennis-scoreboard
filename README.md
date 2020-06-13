@@ -9,10 +9,10 @@ Built on the MERN stack, the client files will be run on a small computer on the
 - Run `npm start` to start both the react build and server with live reloading
 - Run `npm run server` to only run the server with live reloading
 - Run `npm run build` to build the react app for deployment
+- Run `npm run prod` to run the server for the production environment
 
 ## TODO
 - Add to game start screen
 	- How many points to win & serving switch amount?
-- Set up other controls (maybe 'Hold R to reset game' or 'Press D+E+V for admin', etc)
-- Style UI (Rob is designing)
+- Maybe a way to modify scores in game if someone messes up
 - Add stats analysis

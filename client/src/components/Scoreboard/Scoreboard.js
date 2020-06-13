@@ -173,9 +173,15 @@ export default class Scoreboard extends React.Component {
 					.catch(err => console.log(err));
 			}
 
-			document.removeEventListener("keyup", this.handleKeyPress, false);
+			const results = {
+				winner: winner,
+				scores: {
+					home: state.home.score,
+					away: state.away.score
+				}
+			}
 
-			this.props.setGameOver(winner);
+			this.props.setGameOver(results);
 
 		}
 

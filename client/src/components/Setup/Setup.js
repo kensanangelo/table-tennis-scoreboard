@@ -225,10 +225,10 @@ export default class Scoreboard extends React.Component {
 					</label> */}
 				</div>
 				<div className='setup__buttons'>
-					<button className='setup__btn-start' onClick={this.startGame.bind(this)}>
+					<button className='setup__btn-start btn-main' onClick={this.startGame.bind(this)}>
 						Begin Match
 					</button>
-					<button className='setup__btn-practice' onClick={this.setPracticeMode.bind(this)}>
+					<button className='setup__btn-practice btn-hollow' onClick={this.setPracticeMode.bind(this)}>
 						Practice Game
 					</button>
 				</div>

@@ -33,11 +33,13 @@ function App() {
       home: {
         id: '',
         name: 'Home',
+        score: 0,
         isServing: true
       },
       away: {
         id: '',
         name: 'Away',
+        score: 0,
         isServing: false
       }
     }
@@ -45,9 +47,11 @@ function App() {
 
   const [state, setState] = useState(initialState);
 
-  const setGameOver = (winner) => {
+  const setGameOver = (results) => {
     state.gameState = 'gameover';
-    state.winner = winner;
+    state.winner = results.winner;
+    state.players.home.score = results.scores.home;
+    state.players.away.score = results.scores.away;
     setState({...state});
   }
 
@@ -63,12 +67,14 @@ function App() {
           <Scoreboard 
             players={state.players} 
             gameMode={state.gameMode} 
-            setGameOver={(winner)=>{setGameOver(winner);}}
+            setGameOver={(results)=>{setGameOver(results);}}
             setNewGame={()=>{setState(initialState)}}/>
         : ``}
         {state.gameState === 'gameover' ? 
           <GameOver 
             winner={state.winner.name} 
+            homeScore={state.players.home.score}
+            awayScore={state.players.away.score}
             setNewGame={()=>{setState(initialState)}}/>
         : ``}
       </div>
