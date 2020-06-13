@@ -4,3 +4,9 @@
 	font-size: 72px;
 	font-weight: 500;
 }
+
+.App--overtime{
+	.clock{
+		color: $overtime-color;
+	}
+}

@@ -1,7 +1,8 @@
 import React from "react";
 import ScoreCard from './ScoreCard';
 import { sendGameReport } from '../API/API';
-import logo from '../../img/bv.svg';
+//import logo from '../../img/bv.svg';
+import {ReactComponent as Logo} from '../../img/bv.svg';
 
 export default class Scoreboard extends React.Component {
 	constructor(props) {
@@ -93,6 +94,7 @@ export default class Scoreboard extends React.Component {
 		//Checks if we need to go into overtime
 		if(this.checkForOvertime(newState)){
 			newState.gameState = 'overtime';
+			this.props.setOvertime();
 		}
 
 		//Checks if someone has won, and if so, does win state setup
@@ -191,7 +193,7 @@ export default class Scoreboard extends React.Component {
 
 	render() {
 		return (
-			<div className="scoreboard">
+			<div className={`scoreboard`}>
 				<div className="scoreboard__scorecards">
 					<ScoreCard 
 						name={this.state.home.name} 
@@ -207,7 +209,7 @@ export default class Scoreboard extends React.Component {
 					onClick={() => this.props.setNewGame()}>
 						Quit Match
 				</button>
-				<img className="scoreboard__logo" src={logo} alt="logo"/>
+				<Logo className="scoreboard__logo" />
 			</div>
 		);
 	}

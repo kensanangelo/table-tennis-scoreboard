@@ -47,6 +47,11 @@ function App() {
 
   const [state, setState] = useState(initialState);
 
+  const setOvertime = () => {
+    state.gameState = 'overtime';
+    setState({...state});
+  }
+
   const setGameOver = (results) => {
     state.gameState = 'gameover';
     state.winner = results.winner;
@@ -56,25 +61,29 @@ function App() {
   }
 
   return (
-    <div className={state.gameState === 'playing' ? 'App App--playing' : 'App'}>
+    <div className={`App 
+                      ${state.gameState === 'playing' ? 'App--playing' : ''}
+                      ${state.gameState === 'overtime' ? 'App--overtime' : ''}`
+                    }>
       <img className="App__bg" src={state.gameState === 'gameover' ? BackgroundWin : Background} alt="Background gradient"/>
       <div className="App__container">
         <Clock />
         {state.gameState === 'setup' ? 
           <Setup startGame={p=>{setState(p)}} />
         : ``} 
-        {state.gameState === 'playing' ? 
+        {state.gameState === 'playing' || state.gameState === 'overtime' ? 
           <Scoreboard 
             players={state.players} 
             gameMode={state.gameMode} 
+            setOvertime={()=>{setOvertime();}}
             setGameOver={(results)=>{setGameOver(results);}}
             setNewGame={()=>{setState(initialState)}}/>
         : ``}
         {state.gameState === 'gameover' ? 
           <GameOver 
             winner={state.winner.name} 
-            homeScore={state.players.home.score}
-            awayScore={state.players.away.score}
+            home={state.players.home}
+            away={state.players.away}
             setNewGame={()=>{setState(initialState)}}/>
         : ``}
       </div>

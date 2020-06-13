@@ -28,7 +28,7 @@
 	}
 
 	&__name{
-		font-size: 36px;
+		font-size: 46px;
 		font-weight: 600;
 
 		&--serving{
@@ -37,8 +37,8 @@
 			&::before{
 				content: '';
 				display: inline-block;
-				width: 25px;
-				height: 25px;
+				width: 34px;
+				height: 34px;
 				margin-right: 9px;
 				background-color: $serving;
 				border-radius: 50%;
@@ -48,19 +48,22 @@
 
 	&__score{
 		margin-bottom: 10px;
-		font-size: 288px;
+		font-size: 340px;
 		font-weight: 500;
 		line-height: 1;
-		letter-spacing: -10px;
+		letter-spacing: -1.6rem;
 	}
 
 	&__quit{
-		width: 320px;
-		height: 91px;
+		position: absolute;
+		bottom: 73px;
+		left: 75px;
+		height: 60px;
+		padding: 0 40px;
 		border: 3px solid $black;
 		margin-top: auto;
 		background-color: transparent;
-		font-size: 36px;
+		font-size: 24px;
 		font-weight: 600;
 		transition: all .2s;
 		cursor: pointer;
@@ -75,5 +78,45 @@
 		position: absolute;
 		right: 75px;
 		bottom: 73px;
+	}
+}
+
+.App--overtime{
+	padding: 30px !important;
+	border: none !important;
+	background-color: $black;
+
+	.App__container{
+		background-color: $black !important;
+	}
+
+	.scoreboard__name{
+		color: $white;
+
+		&--serving{
+			color: $overtime-color;
+			
+			&::before{
+				background-color: $overtime-color;
+			}
+		}
+	}
+
+	.scoreboard__score{
+		color: $white;
+	}
+
+	.scoreboard__logo{
+		fill: $white;
+	}
+
+	.scoreboard__quit{
+		border-color: $white;
+		background-color: $white;
+		color: $black;
+
+		&:hover{
+			background-color: darken($white, 10%);
+		}
 	}
 }
