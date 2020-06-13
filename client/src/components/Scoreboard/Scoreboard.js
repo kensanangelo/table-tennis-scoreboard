@@ -75,8 +75,6 @@ export default class Scoreboard extends React.Component {
 				this.nextPlay('away')
 			}
 		}
-
-		//TODO Add reset functionality
 	}
 
 	//This processes the current play and starts the next play
@@ -162,9 +160,9 @@ export default class Scoreboard extends React.Component {
 			}
 		}
 
+		//This is if someone won
 		if(winner.name !== ''){
 			state.winner = winner;
-			state.gameState = 'gameOver';
 
 			// Only saves game results if we aren't in a practice round
 			if(state.gameMode === 'standard'){
@@ -174,6 +172,11 @@ export default class Scoreboard extends React.Component {
 					.then(msg => console.log(msg))
 					.catch(err => console.log(err));
 			}
+
+			document.removeEventListener("keyup", this.handleKeyPress, false);
+
+			this.props.setGameOver(winner);
+
 		}
 
 
@@ -199,15 +202,6 @@ export default class Scoreboard extends React.Component {
 						Quit Match
 				</button>
 				<img className="scoreboard__logo" src={logo} alt="logo"/>
-				{this.state.gameState === 'gameOver' ? 
-					<div className="scoreboard__gameover">
-						<h1>GAME OVER</h1>
-						<p>{this.state.winner.name} wins!</p>
-						<button onClick={() => this.props.setNewGame()}>
-							Start New Game
-						</button>
-					</div>
-				: ``}
 			</div>
 		);
 	}

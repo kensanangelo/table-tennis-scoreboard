@@ -43,7 +43,7 @@ html {
 	}
 }
 
-.App--setup{
+.App:not(.App--playing){
 	padding: 0;
 	border: 30px solid $black;
 
