@@ -134,17 +134,10 @@ export default class Scoreboard extends React.Component {
 
 		return (
 			<div className="setup">
-				<p 
-					className={`setup__server
-						${isServerConnected ?
-							``:`error-msg`}
-					`}>
-					{this.state.serverStatus}
-				</p>
-				<h1 className="setup__header">Enter players</h1>
+				<h1 className="setup__header">Big Vision</h1>
+				<h2 className="setup__subheader">Table Tennis League</h2>
 				<div className="setup__players">
 					<div className="setup__player setup__player--home">
-						<h2 className="setup__player-header">Home</h2>
 						{this.state.availablePlayers.length !== 0 ? 
 							<select 
 								id="home-player" 
@@ -160,29 +153,8 @@ export default class Scoreboard extends React.Component {
 							</select>
 						: `No players available`}
 					</div>
-					<div className="setup__serving">
-						<h3 className="setup__header">Who's serving?</h3>
-						<label className="setup__label">
-							Home
-							<input 
-							type="radio" 
-							name="serving" 
-							value="home" 
-							onChange={this.onServingChange.bind(this)}
-							checked={this.state.players.home.isServing}/>
-						</label>
-						<label className="setup__label">
-							Away
-							<input 
-							type="radio" 
-							name="serving" 
-							value="away" 
-							onChange={this.onServingChange.bind(this)} 
-							checked={this.state.players.away.isServing}/>
-						</label>
-					</div>
+					<h2 className="setup__vs">VS</h2>
 					<div className="setup__player setup__player--away">
-						<h2 className="setup__player-header">Away</h2>
 						{this.state.availablePlayers.length !== 0 ? 
 							<select 
 								id="away-player" 
@@ -201,12 +173,42 @@ export default class Scoreboard extends React.Component {
 						: `No players available`}
 					</div>
 				</div>
-				<button onClick={this.startGame.bind(this)}>
-					Start Game
-				</button>
-				<button onClick={this.setPracticeMode.bind(this)}>
-					Practice Game
-				</button>
+				<div className="setup__serving">
+					<h3 className="setup__serving-header">Who's serving?</h3>
+					<label className="setup__label">
+						Home
+						<input 
+						type="radio" 
+						name="serving" 
+						value="home" 
+						onChange={this.onServingChange.bind(this)}
+						checked={this.state.players.home.isServing}/>
+					</label>
+					<label className="setup__label">
+						Away
+						<input 
+						type="radio" 
+						name="serving" 
+						value="away" 
+						onChange={this.onServingChange.bind(this)} 
+						checked={this.state.players.away.isServing}/>
+					</label>
+				</div>
+				<div className='setup__buttons'>
+					<button className='setup__btn-start' onClick={this.startGame.bind(this)}>
+						Begin Match
+					</button>
+					<button className='setup__btn-practice' onClick={this.setPracticeMode.bind(this)}>
+						Practice Game
+					</button>
+				</div>
+				<p 
+					className={`setup__server
+						${isServerConnected ?
+							``:`error-msg`}
+					`}>
+					{this.state.serverStatus}
+				</p>
 			</div>
 	)};
 }
