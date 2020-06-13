@@ -23,7 +23,7 @@ export default class Clock extends React.Component {
 
 	tick() {
 		this.setState({
-			time: new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
+			time: new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).split(" ").join(""),
 		});
 	}
 

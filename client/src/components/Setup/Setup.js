@@ -38,8 +38,8 @@ export default class Scoreboard extends React.Component {
 			// If we can connect to server, fetch all players
 			getPlayers()
 			.then(availPlayers => {
-				// Set available players to state, and 
-				// sets first and last as defaults
+				//Set available players to state, and 
+				//sets first and last as defaults
 				newState.availablePlayers = availPlayers;
 
 				newState.players.home.id = availPlayers[0].player_id;
@@ -90,6 +90,16 @@ export default class Scoreboard extends React.Component {
 		}
 		
       this.setState(newState);
+	}
+
+	// Saves who's serving when changed
+	toggleServing(event){
+		let newState = this.state;
+
+		newState.players.home.isServing = !newState.players.home.isServing;
+		newState.players.away.isServing = !newState.players.away.isServing;
+	
+		this.setState(newState);
 	}
 
 	// Starts game and passes up all our player info
@@ -173,8 +183,28 @@ export default class Scoreboard extends React.Component {
 						: `No players available`}
 					</div>
 				</div>
-				<div className="setup__serving">
-					<h3 className="setup__serving-header">Who's serving?</h3>
+				<div className={`setup__serving 
+													${this.state.players.home.isServing === true ?
+													`setup__serving--home` : `setup__serving--away`}`}>
+					
+						<div className="setup__serving-container">
+							{this.state.players.away.isServing === true ?
+								<button 
+									className="setup__serving-button"
+									onClick={this.toggleServing.bind(this)}>
+										&lt;
+								</button> : ``
+							}
+							<h3 className="setup__serving-header">First Serve</h3>
+							{this.state.players.home.isServing === true ?
+								<button 
+									className="setup__serving-button"
+									onClick={this.toggleServing.bind(this)}>
+										&gt;
+								</button> : ``
+							}
+						</div>
+					{/* <h3 className="setup__serving-header">Who's serving?</h3>
 					<label className="setup__label">
 						Home
 						<input 
@@ -192,7 +222,7 @@ export default class Scoreboard extends React.Component {
 						value="away" 
 						onChange={this.onServingChange.bind(this)} 
 						checked={this.state.players.away.isServing}/>
-					</label>
+					</label> */}
 				</div>
 				<div className='setup__buttons'>
 					<button className='setup__btn-start' onClick={this.startGame.bind(this)}>

@@ -23,12 +23,15 @@
 		width: 100%;
 		margin: 0 auto;
 		margin-top: 158px;
-		margin-bottom: 50px;
+		margin-bottom: 30px;
 	}
 
 	&__player{
 		position: relative;
 		flex: 1;
+		color: $error;
+		font-size: 24px;
+		font-weight: 600;
 
 		select{
 			width: 100%;
@@ -36,11 +39,12 @@
 			padding: 0 46px;
 			border: 3px solid $black;
 			background-color: transparent;
+			color: $black;
 			font-size: 36px;
 			font-weight: 600;
+			cursor: pointer;
 			border-radius: 100px;
 			appearance: none;
-
 		}
 
 		&::after{
@@ -54,6 +58,51 @@
 			border-bottom: 3px solid $black;
 			border-left: 3px solid $black;
 		}
+	}
+
+	&__serving{
+		max-width: 1120px;
+		width: 100%;
+		margin: 0 auto;
+		font-size: 36px;
+		font-weight: 600;
+	}
+
+	&__serving--home{
+		justify-content: flex-start;
+
+		.setup__serving-header{
+			margin-right: 15px;
+		}
+	}
+
+	&__serving--away{
+		justify-content: flex-end;
+
+		.setup__serving-container{
+			margin-left: auto;
+		}
+		
+		.setup__serving-header{
+			margin-left: 15px;
+		}
+	}
+
+	&__serving-container{
+		display: flex;
+		display: flex;
+		justify-content: center;
+		width: 480px;
+		text-align: center;
+	}
+
+	&__serving-button{
+		background-color: transparent;
+		font-size: 40px;
+		font-weight: 600;
+		font-weight: 500;
+		cursor: pointer;
+		appearance: none;
 	}
 
 	&__vs{
@@ -121,7 +170,7 @@
 	}
 
 	.error-msg{
-		color: #ff0000;
+		color: $error;
 		font-weight: 700;
 	}
 }

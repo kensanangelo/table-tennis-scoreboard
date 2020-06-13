@@ -1,6 +1,7 @@
 import React from "react";
 import ScoreCard from './ScoreCard';
 import { sendGameReport } from '../API/API';
+import logo from '../../img/bv.svg';
 
 export default class Scoreboard extends React.Component {
 	constructor(props) {
@@ -182,15 +183,22 @@ export default class Scoreboard extends React.Component {
 	render() {
 		return (
 			<div className="scoreboard">
-				<ScoreCard 
-					name={this.state.home.name} 
-					score={this.state.home.score} 
-					isServing={this.state.home.isServing} />
-				<ScoreCard 
-					name={this.state.away.name} 
-					score={this.state.away.score} 
-					isServing={this.state.away.isServing} />
-
+				<div className="scoreboard__scorecards">
+					<ScoreCard 
+						name={this.state.home.name} 
+						score={('0' + this.state.home.score).slice(-2)} 
+						isServing={this.state.home.isServing} />
+					<ScoreCard 
+						name={this.state.away.name} 
+						score={('0' + this.state.away.score).slice(-2)} 
+						isServing={this.state.away.isServing} />
+				</div>
+				<button 
+					className="scoreboard__quit" 
+					onClick={() => this.props.setNewGame()}>
+						Quit Match
+				</button>
+				<img className="scoreboard__logo" src={logo} alt="logo"/>
 				{this.state.gameState === 'gameOver' ? 
 					<div className="scoreboard__gameover">
 						<h1>GAME OVER</h1>
