@@ -16,3 +16,9 @@ Built on the MERN stack, the client files will be run on a small computer on the
 	- How many points to win & serving switch amount?
 - Maybe a way to modify scores in game if someone messes up
 - Add stats analysis
+
+## Bugs
+- Letter spacing needs to be tweaked (the letters 04 touch)
+- Win screen image loads in slowly, thus causing pop-in.
+	- Should be preloaded at beginning of game
+- Need bold font files. Currently only has regular
