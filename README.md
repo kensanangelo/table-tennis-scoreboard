@@ -13,9 +13,13 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ## TODO
 - Add to game start screen
+	- Show last 3/5/10 games somewhere
 	- How many points to win & serving switch amount?
 - Maybe a way to modify scores in game if someone messes up
 - Add stats analysis
+- Implement ranking system
+	- Probably going to use ELO using this node package
+		- https://github.com/tlhunter/node-arpad
 
 ## Bugs
 - Letter spacing needs to be tweaked (the letters 04 touch)
