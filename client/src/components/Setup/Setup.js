@@ -169,7 +169,7 @@ export default class Scoreboard extends React.Component {
 							<select 
 								id="away-player" 
 								onChange={this.onAwayChange.bind(this)}>
-							{this.state.availablePlayers.slice(0).reverse().map(
+							{this.state.availablePlayers.map(
 								(player) => {
 									if(this.state.players.home.id !== player.player_id){
 										return <option 
