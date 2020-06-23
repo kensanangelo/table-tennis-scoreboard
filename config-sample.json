@@ -1,5 +1,6 @@
 {
 	"serverToken": "102nf238971",
 	"connectionString": "mongodb+srv://<USERNAME>:<PASSWORD>@<MONGO_URL>"
+	//"connectionString": "mongodb+srv://bvAdmin:wearebigvision@cluster0-4n1y8.mongodb.net/scoreboard?retryWrites=true&w=majority"
 
 }
