@@ -57,6 +57,7 @@
 			height: 25px;
 			border-bottom: 3px solid $black;
 			border-left: 3px solid $black;
+			pointer-events: none;
 		}
 	}
 
@@ -97,14 +98,14 @@
 	}
 
 	&__serving-button{
+		display: flex;
+		align-items: center;
 		background-color: transparent;
 		font-size: 40px;
 		font-weight: 600;
 		font-weight: 500;
 		cursor: pointer;
 		appearance: none;
-		display: flex;
-		align-items: center;
 	}
 
 	&__serving-header{
