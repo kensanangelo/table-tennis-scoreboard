@@ -103,6 +103,12 @@
 		font-weight: 500;
 		cursor: pointer;
 		appearance: none;
+		display: flex;
+		align-items: center;
+	}
+
+	&__serving-header{
+		display: inline;
 	}
 
 	&__vs{

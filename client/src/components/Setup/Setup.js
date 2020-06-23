@@ -184,45 +184,27 @@ export default class Scoreboard extends React.Component {
 					</div>
 				</div>
 				<div className={`setup__serving 
-													${this.state.players.home.isServing === true ?
-													`setup__serving--home` : `setup__serving--away`}`}>
-					
-						<div className="setup__serving-container">
-							{this.state.players.away.isServing === true ?
-								<button 
-									className="setup__serving-button"
-									onClick={this.toggleServing.bind(this)}>
-										&lt;
-								</button> : ``
-							}
-							<h3 className="setup__serving-header">First Serve</h3>
-							{this.state.players.home.isServing === true ?
-								<button 
-									className="setup__serving-button"
-									onClick={this.toggleServing.bind(this)}>
-										&gt;
-								</button> : ``
-							}
-						</div>
-					{/* <h3 className="setup__serving-header">Who's serving?</h3>
-					<label className="setup__label">
-						Home
-						<input 
-						type="radio" 
-						name="serving" 
-						value="home" 
-						onChange={this.onServingChange.bind(this)}
-						checked={this.state.players.home.isServing}/>
-					</label>
-					<label className="setup__label">
-						Away
-						<input 
-						type="radio" 
-						name="serving" 
-						value="away" 
-						onChange={this.onServingChange.bind(this)} 
-						checked={this.state.players.away.isServing}/>
-					</label> */}
+										${this.state.players.home.isServing === true ?
+										`setup__serving--home` : `setup__serving--away`}`}
+				>
+			
+					<div className="setup__serving-container">
+						{this.state.players.away.isServing === true ?
+							<button 
+								className="setup__serving-button"
+								onClick={this.toggleServing.bind(this)}>
+									&lt; <h3 className="setup__serving-header">First Serve</h3>
+							</button> : ``
+						}
+						{this.state.players.home.isServing === true ?
+							<button 
+								className="setup__serving-button"
+								onClick={this.toggleServing.bind(this)}>
+									<h3 className="setup__serving-header">First Serve</h3>
+									&gt;
+							</button> : ``
+						}
+					</div>
 				</div>
 				<div className='setup__buttons'>
 					<button className='setup__btn-start btn-main' onClick={this.startGame.bind(this)}>
