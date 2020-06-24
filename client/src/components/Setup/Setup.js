@@ -47,8 +47,8 @@ export default class Scoreboard extends React.Component {
 
 				const numPlayers = availPlayers.length - 1;
 				
-				newState.players.away.id = availPlayers[numPlayers].player_id;
-				newState.players.away.name = availPlayers[numPlayers].name;
+				newState.players.away.id = availPlayers[1].player_id;
+				newState.players.away.name = availPlayers[1].name;
 				
 				this.setState(newState);
 			});
@@ -71,6 +71,7 @@ export default class Scoreboard extends React.Component {
 		let newState = this.state;
 
 		const index = event.target.selectedIndex;
+		
 		newState.players.away.id = event.target.options[index].value;
 		newState.players.away.name = event.target.options[index].text;
 		
