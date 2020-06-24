@@ -3,6 +3,17 @@ import { callApi, getPlayers } from '../API/API';
 
 
 export default class Scoreboard extends React.Component {
+	//Generates new away player options by remove home player from available
+	generateAvailableAwayPlayers(initAvailable, compareId){
+		let awayPlayers = [...initAvailable];
+		for (let i = 0; i < awayPlayers.length; i++) {
+			if(awayPlayers[i].player_id === compareId){
+				awayPlayers.splice(i, 1);
+			}
+		}
+		return awayPlayers;
+	}
+
 	constructor(props) {
 		super(props);
 		
@@ -10,6 +21,7 @@ export default class Scoreboard extends React.Component {
 			gameMode: 'standard',
 			gameState: 'setup',
 			availablePlayers: [],
+			availableAwayPlayers: [],
 			serverStatus: 'CANNOT CONNECT TO API',
 			players: {
 				home: {
@@ -40,15 +52,14 @@ export default class Scoreboard extends React.Component {
 			.then(availPlayers => {
 				//Set available players to state, and 
 				//sets first and last as defaults
-				newState.availablePlayers = availPlayers;
-
+				newState.availablePlayers = [...availPlayers];
 				newState.players.home.id = availPlayers[0].player_id;
 				newState.players.home.name = availPlayers[0].name;
-
-				const numPlayers = availPlayers.length - 1;
 				
-				newState.players.away.id = availPlayers[1].player_id;
-				newState.players.away.name = availPlayers[1].name;
+				newState.availableAwayPlayers = this.generateAvailableAwayPlayers(newState.availablePlayers, newState.players.home.id);;
+				
+				newState.players.away.id = availPlayers[0].player_id;
+				newState.players.away.name = availPlayers[0].name;
 				
 				this.setState(newState);
 			});
@@ -60,8 +71,19 @@ export default class Scoreboard extends React.Component {
 		let newState = this.state;
 
 		const index = event.target.selectedIndex;
+
+		//Sets home player
 		newState.players.home.id = event.target.options[index].value;
 		newState.players.home.name = event.target.options[index].text;
+
+		newState.availableAwayPlayers = this.generateAvailableAwayPlayers(newState.availablePlayers, newState.players.home.id);
+
+		//If the home and away players are the same,
+		//this assigns new away player from list of available
+		if(newState.players.home.id === newState.players.away.id){
+			newState.players.away.id = newState.availableAwayPlayers[0].player_id;
+			newState.players.away.name = newState.availableAwayPlayers[0].name;
+		}
 
       this.setState(newState);
 	}
@@ -152,6 +174,7 @@ export default class Scoreboard extends React.Component {
 						{this.state.availablePlayers.length !== 0 ? 
 							<select 
 								id="home-player" 
+								value={this.state.players.home.id}
 								onChange={this.onHomeChange.bind(this)}>
 							{this.state.availablePlayers.map(
 								(player) => {
@@ -166,19 +189,18 @@ export default class Scoreboard extends React.Component {
 					</div>
 					<h2 className="setup__vs">VS</h2>
 					<div className="setup__player setup__player--away">
-						{this.state.availablePlayers.length !== 0 ? 
+						{this.state.availableAwayPlayers.length !== 0 ? 
 							<select 
 								id="away-player" 
+								value={this.state.players.away.id}
 								onChange={this.onAwayChange.bind(this)}>
-							{this.state.availablePlayers.map(
-								(player) => {
-									if(this.state.players.home.id !== player.player_id){
-										return <option 
-											key={player.player_id} 
-											value={player.player_id}>
-												{player.name}
-										</option>
-									}else return ''
+							{this.state.availableAwayPlayers.map(
+								(player, index) => {
+									return <option 
+										key={player.player_id} 
+										value={player.player_id}>
+											{player.name}
+									</option>
 								})}
 							</select>
 						: `No players available`}
