@@ -4,7 +4,14 @@ const bodyParser = require('body-parser');
 const path = require("path");
 const app = express();
 const port = process.env.PORT || 5000;
-const utils = require("./utils")
+
+const 
+{ 
+   sendError, 
+   sendResponse, 
+   submitGametoDB, 
+   getPlayers 
+} = require("./utils")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,20 +36,20 @@ MongoClient.connect(config.connectionString, {
       //Checks if client sent correct token
       if(req.body.token === config.serverToken){
 
-         utils.submitGametoDB(gamesCollection, req.body)
+         submitGametoDB(gamesCollection, req.body)
          .then(response => {
    
             if(response === '200'){
-               utils.sendResponse(res, {status: 200, message: `Game saved correctly.`});
+               sendResponse(res, {status: 200, message: `Game saved correctly.`});
             }else{
-               utils.sendError(res, 500, {message: 'DB Insertion Failed. Reason: ' + response.errmsg})
+               sendError(res, 500, {message: 'DB Insertion Failed. Reason: ' + response.errmsg})
             }
 
          });
 
 
       }else{
-         utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
+         sendError(res, 501, {message: 'Bad token. Permission denied'})
       }
    });
 
@@ -50,20 +57,20 @@ MongoClient.connect(config.connectionString, {
       //Checks if client sent correct token
       if(req.body.token === config.serverToken){
 
-         utils.getPlayers(playersCollection)
+         getPlayers(playersCollection)
          .then(players => {
-            utils.sendResponse(res, {status: 200, players: players});
+            sendResponse(res, {status: 200, players: players});
          });
 
       }else{
-         utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
+         sendError(res, 501, {message: 'Bad token. Permission denied'})
       }
    });
 })
 
 app.get('/api/hello', (req, res) => {
    //* This is used to hit up the API to make sure it's responding correctly
-   utils.sendResponse(res, { msg: 'Connected to API' });
+   sendResponse(res, { msg: 'Connected to API' });
 });
 
 //! Maybe delete this?
@@ -75,7 +82,7 @@ app.get('/', function(req, res) {
       res.sendFile(__dirname + '/client/build/index.html')
 
    }else{
-      utils.sendError(res, 501, {message: 'Bad token. Permission denied'})
+      sendError(res, 501, {message: 'Bad token. Permission denied'})
    }
 });
 
