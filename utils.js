@@ -18,6 +18,7 @@ module.exports = {
 			next();
 			return;
 		}else{
+			console.log("\x1b[31m", `REQ REJECTED: BAD TOKEN`);
 			sendError(res, 401, {message: 'Bad token. Permission denied'})
 		}
 	},
@@ -47,7 +48,7 @@ module.exports = {
 
 			return '200';
 		}catch(error){
-			console.log("GAME INSERT ERROR:");
+			console.log("\x1b[31m", "GAME INSERT ERROR:");
 			console.error(error);
 
 			return error;
@@ -60,7 +61,7 @@ module.exports = {
 			
 			return players;
 		}catch(error){
-			console.log("Players Get ERROR:");
+			console.log("\x1b[31m", "Players Get ERROR:");
 			console.error(error);
 
 			return error;

@@ -27,7 +27,7 @@ MongoClient.connect(config.connectionString, {
    useUnifiedTopology: true
 }, (err, client) => {
    if (err) return console.error(err)
-   console.log('Connected to Database')
+   console.log("\x1b[44m\x1b[30m", 'Connected to Database', '\x1b[0m\n')
 
    const db = client.db('scoreboard')
    const playersCollection = db.collection('players')
@@ -38,8 +38,12 @@ MongoClient.connect(config.connectionString, {
       .then(response => {
 
          if(response === '200'){
+            console.log('\x1b[32m', 'Game saved correctly');
+            
             sendResponse(res, {status: 200, message: `Game saved correctly.`});
          }else{
+            console.log("\x1b[31m", `DB ERROR: ${response.errmsg}`);
+            
             sendError(res, 500, {message: 'DB Insertion Failed. Reason: ' + response.errmsg})
          }
 
@@ -49,6 +53,7 @@ MongoClient.connect(config.connectionString, {
    app.post('/api/get-players', checkToken, (req, res) => {
       getPlayers(playersCollection)
       .then(players => {
+         console.log('\x1b[32m', 'Req: Retrieved all players');
          sendResponse(res, {status: 200, players: players});
       });
    });
@@ -63,7 +68,16 @@ app.get('/api/hello', (req, res) => {
 //! Depends on if client can access server to get client files 
 //! or if they have to be on comp separately
 app.get('/', checkToken, function(req, res) {
+   console.log('Req: Client files sent');
+   
    res.sendFile(__dirname + '/client/build/index.html')
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log("\x1b[46m\x1b[30m", `Listening on port ${port}`, '\x1b[0m'));
+
+console.log('\n=================================');
+
+console.log("\n\x1b[47m\x1b[30m", 'BV SCOREBOARD IS UP AND RUNNING', '\x1b[0m\n');
+console.log('V1.0.1\n');
+
+
