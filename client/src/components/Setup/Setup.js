@@ -58,8 +58,8 @@ export default class Scoreboard extends React.Component {
 				
 				newState.availableAwayPlayers = this.generateAvailableAwayPlayers(newState.availablePlayers, newState.players.home.id);;
 				
-				newState.players.away.id = availPlayers[0].player_id;
-				newState.players.away.name = availPlayers[0].name;
+				newState.players.away.id = newState.availableAwayPlayers[0].player_id;
+				newState.players.away.name = newState.availableAwayPlayers[0].name;
 				
 				this.setState(newState);
 			});
