@@ -47,11 +47,11 @@ export const getPlayers = async () => {
 	if(response.ok){
 		const body = await response.json();
 		
-		if (response.status !== 200) throw Error(body.message);
+		if (response.status !== 200) console.log(body.message);
 
 		return body.players;
 	}else{
-		throw Error(response.statusText)
+		console.log(`Error: ${response.statusText}`);
 	}
 	
 };

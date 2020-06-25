@@ -1,4 +1,27 @@
+const config = require('./config');
+
+function sendError(res, code, data) {
+	res.status(code).send(data);
+}
+
 module.exports = {
+	checkToken: function (req, res, next) {
+		let token = '';
+
+		if(req.method === 'POST'){
+			token = req.body.token;
+		}else{
+			token = req.query.token;
+		}
+
+		if(token === config.serverToken){
+			next();
+			return;
+		}else{
+			sendError(res, 401, {message: 'Bad token. Permission denied'})
+		}
+	},
+
 	submitGametoDB: async function (gamesCollection, rawData) {
 		
 		const insertData = {
@@ -53,7 +76,5 @@ module.exports = {
 		res.send(data);
 	},
 
-	sendError: function (res, code, data) {
-		res.status(code).send(data);
-	}
+	sendError: sendError
 };

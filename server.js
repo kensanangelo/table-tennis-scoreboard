@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 
 const 
 { 
+   checkToken,
    sendError, 
    sendResponse, 
    submitGametoDB, 
@@ -24,7 +25,7 @@ app.use('/client/build/static', express.static(__dirname + '/client/build/static
 const MongoClient = require('mongodb').MongoClient
 MongoClient.connect(config.connectionString, {
    useUnifiedTopology: true
- }, (err, client) => {
+}, (err, client) => {
    if (err) return console.error(err)
    console.log('Connected to Database')
 
@@ -32,39 +33,24 @@ MongoClient.connect(config.connectionString, {
    const playersCollection = db.collection('players')
    const gamesCollection = db.collection('games')
 
-   app.post('/api/submit-game', (req, res) => {
-      //Checks if client sent correct token
-      if(req.body.token === config.serverToken){
+   app.post('/api/submit-game', checkToken, (req, res) => {
+      submitGametoDB(gamesCollection, req.body)
+      .then(response => {
 
-         submitGametoDB(gamesCollection, req.body)
-         .then(response => {
-   
-            if(response === '200'){
-               sendResponse(res, {status: 200, message: `Game saved correctly.`});
-            }else{
-               sendError(res, 500, {message: 'DB Insertion Failed. Reason: ' + response.errmsg})
-            }
+         if(response === '200'){
+            sendResponse(res, {status: 200, message: `Game saved correctly.`});
+         }else{
+            sendError(res, 500, {message: 'DB Insertion Failed. Reason: ' + response.errmsg})
+         }
 
-         });
-
-
-      }else{
-         sendError(res, 501, {message: 'Bad token. Permission denied'})
-      }
+      });
    });
 
-   app.post('/api/get-players', (req, res) => {
-      //Checks if client sent correct token
-      if(req.body.token === config.serverToken){
-
-         getPlayers(playersCollection)
-         .then(players => {
-            sendResponse(res, {status: 200, players: players});
-         });
-
-      }else{
-         sendError(res, 501, {message: 'Bad token. Permission denied'})
-      }
+   app.post('/api/get-players', checkToken, (req, res) => {
+      getPlayers(playersCollection)
+      .then(players => {
+         sendResponse(res, {status: 200, players: players});
+      });
    });
 })
 
@@ -76,14 +62,8 @@ app.get('/api/hello', (req, res) => {
 //! Maybe delete this?
 //! Depends on if client can access server to get client files 
 //! or if they have to be on comp separately
-app.get('/', function(req, res) {
-   if(req.query.token === config.serverToken){
-
-      res.sendFile(__dirname + '/client/build/index.html')
-
-   }else{
-      sendError(res, 501, {message: 'Bad token. Permission denied'})
-   }
+app.get('/', checkToken, function(req, res) {
+   res.sendFile(__dirname + '/client/build/index.html')
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
