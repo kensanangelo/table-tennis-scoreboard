@@ -1,6 +1,6 @@
 {
   "name": "scoreboard",
-  "version": "0.1.0",
+  "version": "1.0.5",
   "private": true,
   "proxy": "http://localhost:5000/",
   "homepage": "client/build",
