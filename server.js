@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const path = require("path");
 const app = express();
 const port = process.env.PORT || 5000;
+const generateTerminalEffect = require('./utils/terminal-effect-generator');
 
 const 
 { 
@@ -12,7 +13,7 @@ const
    sendResponse, 
    submitGametoDB, 
    getPlayers 
-} = require("./utils")
+} = require("./utils/utils")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -75,9 +76,4 @@ app.get('/', checkToken, function(req, res) {
 
 app.listen(port, () => console.log("\x1b[46m\x1b[30m", `Listening on port ${port}`, '\x1b[0m'));
 
-console.log('\n=================================');
-
-console.log("\n\x1b[47m\x1b[30m", 'BV SCOREBOARD IS UP AND RUNNING', '\x1b[0m\n');
-console.log('V1.0.1\n');
-
-
+generateTerminalEffect();

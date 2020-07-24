@@ -1,4 +1,4 @@
-const config = require('./config');
+const config = require('../config.json');
 
 function sendError(res, code, data) {
 	res.status(code).send(data);
