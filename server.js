@@ -28,7 +28,7 @@ MongoClient.connect(config.connectionString, {
    useUnifiedTopology: true
 }, (err, client) => {
    if (err) return console.error(err)
-   console.log("\x1b[44m\x1b[30m", 'Connected to Database', '\x1b[0m\n')
+   console.log("\x1b[44m\x1b[37m", 'Connected to Database', '\x1b[0m\n')
 
    const db = client.db('scoreboard')
    const playersCollection = db.collection('players')
