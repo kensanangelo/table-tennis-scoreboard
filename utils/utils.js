@@ -8,28 +8,28 @@ module.exports = {
 	checkToken: function (req, res, next) {
 		let token = '';
 
-		if(req.method === 'POST'){
+		if (req.method === 'POST') {
 			token = req.body.token;
-		}else{
+		} else {
 			token = req.query.token;
 		}
 
-		if(token === config.serverToken){
+		if (token === config.serverToken) {
 			next();
 			return;
-		}else{
-			console.log("\x1b[31m", `REQ REJECTED: BAD TOKEN`);
-			sendError(res, 401, {message: 'Bad token. Permission denied'})
+		} else {
+			console.log('\x1b[31m', `REQ REJECTED: BAD TOKEN`);
+			sendError(res, 401, { message: 'Bad token. Permission denied' });
 		}
 	},
 
 	submitGametoDB: async function (gamesCollection, rawData) {
-		
 		const insertData = {
 			plays: rawData.plays,
+			date: new Date(),
 			winner: {
 				player_id: rawData.winner.id,
-				name: rawData.winner.name
+				name: rawData.winner.name,
 			},
 			home: {
 				player_id: rawData.home.id,
@@ -39,29 +39,29 @@ module.exports = {
 			away: {
 				player_id: rawData.away.id,
 				name: rawData.away.name,
-				score: rawData.away.score
-			}
-		}
+				score: rawData.away.score,
+			},
+		};
 
-		try{
-			const result = await gamesCollection.insertOne(insertData)
+		try {
+			const result = await gamesCollection.insertOne(insertData);
 
 			return '200';
-		}catch(error){
-			console.log("\x1b[31m", "GAME INSERT ERROR:");
+		} catch (error) {
+			console.log('\x1b[31m', 'GAME INSERT ERROR:');
 			console.error(error);
 
 			return error;
 		}
 	},
 
-	getPlayers: async function (playersCollection){
-		try{
+	getPlayers: async function (playersCollection) {
+		try {
 			const players = await playersCollection.find().toArray();
-			
+
 			return players;
-		}catch(error){
-			console.log("\x1b[31m", "Players Get ERROR:");
+		} catch (error) {
+			console.log('\x1b[31m', 'Players Get ERROR:');
 			console.error(error);
 
 			return error;
@@ -69,13 +69,15 @@ module.exports = {
 	},
 
 	sendResponse: function (res, data) {
-
 		// Sticks CORS headers on so it can work in dev environment
 		// TODO Maybe delete or auto-hide in production
-		res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+		res.header(
+			'Access-Control-Allow-Headers',
+			'Origin, X-Requested-With, Content-Type, Accept'
+		);
 		res.send(data);
 	},
 
-	sendError: sendError
+	sendError: sendError,
 };
