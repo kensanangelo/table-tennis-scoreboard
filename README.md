@@ -18,7 +18,6 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ## TODO
 
--  Add date of game to DB so we can track seasons
 -  Who's serving should be next screen after setup (can be selected with paddles)
 -  Add to game start screen - Show last 3/5/10 games somewhere - How many points to win & serving switch amount?
 -  Maybe a way to modify scores in game if someone messes up
