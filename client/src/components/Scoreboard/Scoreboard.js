@@ -1,216 +1,217 @@
 import React from "react";
-import ScoreCard from './ScoreCard';
-import { sendGameReport } from '../API/API';
+import ScoreCard from "./ScoreCard";
+import { sendGameReport } from "../API/API";
 //import logo from '../../img/bv.svg';
-import {ReactComponent as Logo} from '../../img/bv.svg';
+import { ReactComponent as Logo } from "../../img/bv.svg";
 
 export default class Scoreboard extends React.Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		//* Activate this if you want to randomly select who serves first
-		// let isHomeServing = true;
-		
-		// if(Math.random() >= 0.5){
-		// 	isHomeServing = false;
-		// }
-		
-		//* Official rules state rotating every:
-		//* 2 points for 11 point games
-		//* 5 points for 21 point games
+    //* Activate this if you want to randomly select who serves first
+    // let isHomeServing = true;
 
-		//* We play 5 points for 11 point games
-		//* That will be the default until I can convince them otherwise
-		const winScore = {
-			official: 11,
-			longPlay: 21,
-		}
-		
-		const servingRotation = {
-			official: 2,
-			longPlay: 5,
-		};
+    // if(Math.random() >= 0.5){
+    // 	isHomeServing = false;
+    // }
 
-		this.state = {
-			winScore: winScore.official,
-			serveChangeLimit: servingRotation.longPlay,
-			plays: 0,
-			gameMode: this.props.gameMode,
-			gameState: 'playing',
-			winner: {
-				id: 0,
-				name: ''
-			},
-			home: {
-				id: props.players.home.id,
-				name: props.players.home.name,
-				score: 0,
-				isServing: props.players.home.isServing,
-			},
-			away: {
-				id: props.players.away.id,
-				name: props.players.away.name,
-				score: 0,
-				isServing: props.players.away.isServing,
-			}
-		};
-	}
-	
-	componentDidMount() {
-		document.addEventListener("keyup", this.handleKeyPress, false);
-	}
+    //* Official rules state rotating every:
+    //* 2 points for 11 point games
+    //* 5 points for 21 point games
 
-	componentWillUnmount(){
-		document.removeEventListener("keyup", this.handleKeyPress, false);
-	}
-	
+    //* We play 5 points for 11 point games
+    //* That will be the default until I can convince them otherwise
+    const winScore = {
+      official: 11,
+      longPlay: 21
+    };
 
-	handleKeyPress = (event) => {
-		if(this.state.gameState !== 'gameOver'){
-			//* Home team scoring is mapped to the Z button
-			//* Away team is mapped to P button
-			if(event.key === 'z'){
-				this.nextPlay('home')
-				
-			}else if(event.key === 'p'){
-				this.nextPlay('away')
-			}
-		}
-	}
+    const servingRotation = {
+      official: 2,
+      longPlay: 5
+    };
 
-	//This processes the current play and starts the next play
-	nextPlay = (whoScored) => {
-		let newState = this.state;
+    this.state = {
+      winScore: winScore.official,
+      serveChangeLimit: servingRotation.longPlay,
+      plays: 0,
+      gameMode: this.props.gameMode,
+      gameState: "playing",
+      winner: {
+        id: 0,
+        name: ""
+      },
+      home: {
+        id: props.players.home.id,
+        name: props.players.home.name,
+        score: 0,
+        isServing: props.players.home.isServing
+      },
+      away: {
+        id: props.players.away.id,
+        name: props.players.away.name,
+        score: 0,
+        isServing: props.players.away.isServing
+      }
+    };
+  }
 
-		newState = this.incrementPlays(newState);
+  componentDidMount() {
+    document.addEventListener("keyup", this.handleKeyPress, false);
+  }
 
-		//Gives the point to whoever got it
-		if(whoScored === 'home'){
-			newState.home.score++;
-		}else if(whoScored === 'away'){
-			newState.away.score++;
-		}
+  componentWillUnmount() {
+    document.removeEventListener("keyup", this.handleKeyPress, false);
+  }
 
-		//Checks if we need to go into overtime
-		if(this.checkForOvertime(newState)){
-			newState.gameState = 'overtime';
-			this.props.setOvertime();
-		}
+  handleKeyPress = event => {
+    if (this.state.gameState !== "gameOver") {
+      //* Home team scoring is mapped to the Z button
+      //* Away team is mapped to P button
+      if (event.key === "z") {
+        this.nextPlay("home");
+      } else if (event.key === "p") {
+        this.nextPlay("away");
+      }
+    }
+  };
 
-		//Checks if someone has won, and if so, does win state setup
-		newState = this.checkForWinner(newState);
+  //This processes the current play and starts the next play
+  nextPlay = whoScored => {
+    let newState = this.state;
 
-		this.setState(newState);
-	}
+    newState = this.incrementPlays(newState);
 
-	incrementPlays(state) {
-		// Adds a play and decides if we need to switch servers
-		//* A play is not considered happened until someone scores
-		
-		state.plays++;
+    //Gives the point to whoever got it
+    if (whoScored === "home") {
+      newState.home.score++;
+    } else if (whoScored === "away") {
+      newState.away.score++;
+    }
 
-		if (state.plays % state.serveChangeLimit === 0) {
-			// Switches server
-			state.home.isServing = !state.home.isServing;
-			state.away.isServing = !state.away.isServing;
-		}
+    //Checks if we need to go into overtime
+    if (this.checkForOvertime(newState)) {
+      newState.gameState = "overtime";
+      this.props.setOvertime();
+    }
 
-		return state;
-	}
+    //Checks if someone has won, and if so, does win state setup
+    newState = this.checkForWinner(newState);
 
-	checkForOvertime(state) {
-		if(state.gameState === 'overtime'){ return true; }
-		
-		const almostWin = state.winScore - 1;
+    this.setState(newState);
+  };
 
-		if(state.home.score === almostWin
-			&& state.away.score === almostWin){
-			return true;
-		}
-		
-		return false;
-	}
+  incrementPlays(state) {
+    // Adds a play and decides if we need to switch servers
+    //* A play is not considered happened until someone scores
 
-	checkForWinner(state) {
-		//Formats winner for adding to state
-		function setWinner(player){
-			let result = {
-				id: player.id,
-				name: player.name
-			};
-	
-			return result;
-		}
+    state.plays++;
 
-		let winner = {
-			id: '',
-			name: ''
-		};
+    if (state.plays % state.serveChangeLimit === 0) {
+      // Switches server
+      state.home.isServing = !state.home.isServing;
+      state.away.isServing = !state.away.isServing;
+    }
 
-		//If it's overtime, the win conditions are different
-		if(state.gameState === 'overtime'){
-			if(state.home.score - state.away.score >= 2){
-				winner = setWinner(state.home);
-			}else if(state.away.score - state.home.score >= 2){
-				winner = setWinner(state.away);
-			}
-		}else{ //Regular win conditions
-			if(state.home.score === state.winScore){
-				winner = setWinner(state.home);
-			}else if(state.away.score === state.winScore){
-				winner = setWinner(state.away);
-			}
-		}
+    return state;
+  }
 
-		//This is if someone won
-		if(winner.name !== ''){
-			state.winner = winner;
+  checkForOvertime(state) {
+    if (state.gameState === "overtime") {
+      return true;
+    }
 
-			// Only saves game results if we aren't in a practice round
-			if(state.gameMode === 'standard'){
-				//Sends the game results to the backend api
-				//Logs the response to the console
-				sendGameReport(state)
-					.then(msg => console.log(msg))
-					.catch(err => console.log(err));
-			}
+    const almostWin = state.winScore - 1;
 
-			const results = {
-				winner: winner,
-				scores: {
-					home: state.home.score,
-					away: state.away.score
-				}
-			}
+    if (state.home.score === almostWin && state.away.score === almostWin) {
+      return true;
+    }
 
-			this.props.setGameOver(results);
+    return false;
+  }
 
-		}
+  checkForWinner(state) {
+    //Formats winner for adding to state
+    function setWinner(player) {
+      let result = {
+        id: player.id,
+        name: player.name
+      };
 
+      return result;
+    }
 
-		return state;
-	}
+    let winner = {
+      id: "",
+      name: ""
+    };
 
-	render() {
-		return (
-			<div className={`scoreboard`}>
-				<div className="scoreboard__scorecards">
-					<ScoreCard 
-						name={this.state.home.name} 
-						score={('0' + this.state.home.score).slice(-2)} 
-						isServing={this.state.home.isServing} />
-					<ScoreCard 
-						name={this.state.away.name} 
-						score={('0' + this.state.away.score).slice(-2)} 
-						isServing={this.state.away.isServing} />
-				</div>
-				<button 
-					className="scoreboard__quit" 
-					onClick={() => this.props.setNewGame()}>
-						Quit Match
-				</button>
-				<Logo className="scoreboard__logo" />
-			</div>
-		);
-	}
+    //If it's overtime, the win conditions are different
+    if (state.gameState === "overtime") {
+      if (state.home.score - state.away.score >= 2) {
+        winner = setWinner(state.home);
+      } else if (state.away.score - state.home.score >= 2) {
+        winner = setWinner(state.away);
+      }
+    } else {
+      //Regular win conditions
+      if (state.home.score === state.winScore) {
+        winner = setWinner(state.home);
+      } else if (state.away.score === state.winScore) {
+        winner = setWinner(state.away);
+      }
+    }
+
+    //This is if someone won
+    if (winner.name !== "") {
+      state.winner = winner;
+
+      // Only saves game results if we aren't in a practice round
+      if (state.gameMode === "standard") {
+        //Sends the game results to the backend api
+        //Logs the response to the console
+        sendGameReport(state)
+          .then(msg => console.log(msg))
+          .catch(err => console.log(err));
+      }
+
+      const results = {
+        winner: winner,
+        scores: {
+          home: state.home.score,
+          away: state.away.score
+        }
+      };
+
+      this.props.setGameOver(results);
+    }
+
+    return state;
+  }
+
+  render() {
+    return (
+      <div className={`scoreboard`}>
+        <div className="scoreboard__scorecards">
+          <ScoreCard
+            name={this.state.home.name}
+            score={("0" + this.state.home.score).slice(-2)}
+            isServing={this.state.home.isServing}
+          />
+          <ScoreCard
+            name={this.state.away.name}
+            score={("0" + this.state.away.score).slice(-2)}
+            isServing={this.state.away.isServing}
+          />
+        </div>
+        <button
+          className="scoreboard__quit"
+          onClick={() => this.props.setNewGame()}
+        >
+          Quit Match
+        </button>
+        <Logo className="scoreboard__logo" />
+      </div>
+    );
+  }
 }

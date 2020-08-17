@@ -11,7 +11,8 @@ const {
   sendError,
   sendResponse,
   submitGametoDB,
-  getPlayers
+  getPlayers,
+  getStats
 } = require("./utils/utils");
 
 app.use(bodyParser.json());
@@ -55,10 +56,17 @@ MongoClient.connect(
       });
     });
 
+    app.post("/api/get-stats", checkToken, (req, res) => {
+      getStats(gamesCollection, playersCollection).then((games, players) => {
+        console.log("\x1b[32m", "Req: Retrieved all games");
+        sendResponse(res, { status: 200, games, players });
+      });
+    });
+
     app.post("/api/get-players", checkToken, (req, res) => {
       getPlayers(playersCollection).then(players => {
         console.log("\x1b[32m", "Req: Retrieved all players");
-        sendResponse(res, { status: 200, players: players });
+        sendResponse(res, { status: 200, players });
       });
     });
   }
