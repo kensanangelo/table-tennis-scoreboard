@@ -1,88 +1,88 @@
 .stats__btn {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  font-size: 30px;
-  height: 70px;
-  padding: 0px 50px;
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	font-size: 30px;
+	height: 70px;
+	//padding: 0px 50px;
 }
 
 .stats__table {
-  width: 80%;
-  margin: auto;
-  border-collapse: collapse;
-  table-layout: fixed;
-  border-top: 4px solid black;
-  border-bottom: 4px solid black;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
+	width: 80%;
+	margin: auto;
+	border-collapse: collapse;
+	table-layout: fixed;
+	border-top: 4px solid black;
+	border-bottom: 4px solid black;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
 
-  tbody {
-    display: block;
-    width: 100%;
-    overflow: auto;
-    height: 40vh;
+	tbody {
+		display: block;
+		width: 100%;
+		overflow: auto;
+		height: 40vh;
 
-    tr:first-of-type td {
-      border-top: 0px;
-    }
+		tr:first-of-type td {
+			border-top: 0px;
+		}
 
-    tr:last-of-type td {
-      border-bottom: 0px;
-    }
-  }
+		tr:last-of-type td {
+			border-bottom: 0px;
+		}
+	}
 
-  tr {
-    display: flex;
+	tr {
+		display: flex;
 
-    td {
-      &:first-of-type {
-        width: 20%;
-      }
-    }
-  }
+		td {
+			&:first-of-type {
+				width: 20%;
+			}
+		}
+	}
 
-  td,
-  th {
-    text-align: left;
-    padding: 30px;
-    width: 16%;
-    border: 2px solid black;
-  }
+	td,
+	th {
+		text-align: left;
+		padding: 30px;
+		width: 16%;
+		border: 2px solid black;
+	}
 
-  th {
-    font-size: 36px;
-    font-weight: 600;
-    border-bottom: 4px solid black;
-    border-top: 0px;
+	th {
+		font-size: 36px;
+		font-weight: 600;
+		border-bottom: 4px solid black;
+		border-top: 0px;
 
-    &:first-of-type {
-      width: 20%;
-    }
-  }
+		&:first-of-type {
+			width: 20%;
+		}
+	}
 
-  td {
-    font-size: 26px;
-    font-weight: 500;
-  }
+	td {
+		font-size: 26px;
+		font-weight: 500;
+	}
 
-  ::-webkit-scrollbar {
-    display: none;
-  }
+	::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 .return {
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 30px;
-  height: 70px;
+	position: absolute;
+	bottom: 50px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 30px;
+	height: 70px;
 }
 
 audio {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
 }
