@@ -1,151 +1,177 @@
-const config = require("../config.json");
+const config = require('../config.json');
 
 function sendError(res, code, data) {
-  res.status(code).send(data);
+	res.status(code).send(data);
 }
 
 module.exports = {
-  checkToken: function(req, res, next) {
-    let token = "";
+	checkToken: function (req, res, next) {
+		let token = '';
 
-    if (req.method === "POST") {
-      token = req.body.token;
-    } else {
-      token = req.query.token;
-    }
+		if (req.method === 'POST') {
+			token = req.body.token;
+		} else {
+			token = req.query.token;
+		}
 
-    if (token === config.serverToken) {
-      next();
-      return;
-    } else {
-      console.log("\x1b[31m", `REQ REJECTED: BAD TOKEN`);
-      sendError(res, 401, { message: "Bad token. Permission denied" });
-    }
-  },
+		if (token === config.serverToken) {
+			next();
+			return;
+		} else {
+			console.log('\x1b[31m', `REQ REJECTED: BAD TOKEN`);
+			sendError(res, 401, { message: 'Bad token. Permission denied' });
+		}
+	},
 
-  submitGametoDB: async function(gamesCollection, rawData) {
-    const insertData = {
-      plays: rawData.plays,
-      date: new Date(),
-      winner: {
-        player_id: rawData.winner.id,
-        name: rawData.winner.name
-      },
-      home: {
-        player_id: rawData.home.id,
-        name: rawData.home.name,
-        score: rawData.home.score
-      },
-      away: {
-        player_id: rawData.away.id,
-        name: rawData.away.name,
-        score: rawData.away.score
-      }
-    };
+	submitGametoDB: async function (gamesCollection, rawData) {
+		const insertData = {
+			plays: rawData.plays,
+			date: new Date(),
+			winner: {
+				player_id: rawData.winner.id,
+				name: rawData.winner.name,
+			},
+			home: {
+				player_id: rawData.home.id,
+				name: rawData.home.name,
+				score: rawData.home.score,
+			},
+			away: {
+				player_id: rawData.away.id,
+				name: rawData.away.name,
+				score: rawData.away.score,
+			},
+		};
 
-    try {
-      const result = await gamesCollection.insertOne(insertData);
+		try {
+			const result = await gamesCollection.insertOne(insertData);
 
-      return "200";
-    } catch (error) {
-      console.log("\x1b[31m", "GAME INSERT ERROR:");
-      console.error(error);
+			return '200';
+		} catch (error) {
+			console.log('\x1b[31m', 'GAME INSERT ERROR:');
+			console.error(error);
 
-      return error;
-    }
-  },
+			return error;
+		}
+	},
 
-  getStats: async function(gamesCollection, playersCollection) {
-    try {
-      const players = await playersCollection.find().toArray();
-      let games = await gamesCollection.find().toArray();
+	getStats: async function (gamesCollection, playersCollection) {
+		try {
+			const players = await playersCollection.find().toArray();
+			let games = await gamesCollection.find().toArray();
 
-      let stats = [];
+			let stats = [];
 
-      players.map(player => {
-        let wins = 0;
-        let losses = 0;
-        let plays = 0;
-        let overtime = 0;
+			players.map((player) => {
+				let wins = 0;
+				let losses = 0;
+				let plays = 0;
+				let overtime = 0;
 
-        games.map(game => {
-          // Check to see if the player is in this game
-          if (
-            player.player_id === game.away.player_id ||
-            player.player_id === game.home.player_id
-          ) {
-            // Check to see if the winner is the player
-            if (game.winner.player_id === player.player_id) {
-              wins++;
-            } else {
-              losses++;
-            }
+				games.map((game) => {
+					// Check to see if the player is in this game
+					if (
+						player.player_id === game.away.player_id ||
+						player.player_id === game.home.player_id
+					) {
+						// Check to see if the winner is the player
+						if (game.winner.player_id === player.player_id) {
+							wins++;
+						} else {
+							losses++;
+						}
 
-            if (game.plays > plays) {
-              plays = game.plays;
-            }
+						if (game.plays > plays) {
+							plays = game.plays;
+						}
 
-            if (game.plays >= 21) {
-              overtime++;
-            }
-          }
-        });
+						if (game.plays >= 21) {
+							overtime++;
+						}
+					}
+				});
 
-        let winrate = (wins / (wins + losses)) * 100;
+				let winrate = (wins / (wins + losses)) * 100;
 
-        if (winrate <= 0 || !winrate) {
-          winrate = 0;
-        } else {
-          winrate = winrate.toFixed(0);
-        }
+				if (winrate <= 0 || !winrate) {
+					winrate = 0;
+				} else {
+					winrate = winrate.toFixed(0);
+				}
 
-        stats.push({
-          player_id: player.player_id,
-          name: player.name,
-          wins: wins,
-          losses: losses,
-          winrate: winrate,
-          plays: plays,
-          overtime: overtime
-        });
-      });
+				stats.push({
+					player_id: player.player_id,
+					name: player.name,
+					wins: wins,
+					losses: losses,
+					winrate: winrate,
+					plays: plays,
+					overtime: overtime,
+				});
+			});
 
-      stats.sort((a, b) => {
-        return b.winrate - a.winrate;
-      });
+			stats.sort((a, b) => {
+				return b.winrate - a.winrate;
+			});
 
-      return stats;
-    } catch (error) {
-      console.log("\x1b[31m", "Games Get ERROR:");
-      console.error(error);
+			return stats;
+		} catch (error) {
+			console.log('\x1b[31m', 'Games Get ERROR:');
+			console.error(error);
 
-      return error;
-    }
-  },
+			return error;
+		}
+	},
 
-  getPlayers: async function(playersCollection) {
-    try {
-      const players = await playersCollection.find().toArray();
+	getGames: async function (gamesCollection) {
+		try {
+			return await gamesCollection.find().toArray();
+		} catch (error) {
+			console.log('\x1b[31m', 'Games Get ERROR:');
+			console.error(error);
 
-      return players;
-    } catch (error) {
-      console.log("\x1b[31m", "Players Get ERROR:");
-      console.error(error);
+			return error;
+		}
+	},
 
-      return error;
-    }
-  },
+	getPlayers: async function (playersCollection) {
+		try {
+			const players = await playersCollection.find().toArray();
 
-  sendResponse: function(res, data) {
-    // Sticks CORS headers on so it can work in dev environment
-    // TODO Maybe delete or auto-hide in production
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    res.send(data);
-  },
+			return players;
+		} catch (error) {
+			console.log('\x1b[31m', 'Players Get ERROR:');
+			console.error(error);
 
-  sendError: sendError
+			return error;
+		}
+	},
+
+	updatePlayerElo: async function (player, playersCollection) {
+		try {
+			const players = await playersCollection
+				.find({ player_id: player.player_id })
+				.toArray();
+
+			return players;
+		} catch (error) {
+			console.log('\x1b[31m', 'Player Update ERROR:');
+			console.error(error);
+
+			return error;
+		}
+	},
+
+	sendResponse: function (res, data) {
+		// Sticks CORS headers on so it can work in dev environment
+		// TODO Maybe delete or auto-hide in production
+		res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+		res.header(
+			'Access-Control-Allow-Headers',
+			'Origin, X-Requested-With, Content-Type, Accept'
+		);
+		res.send(data);
+	},
+
+	sendError: sendError,
 };

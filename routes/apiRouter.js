@@ -4,12 +4,15 @@ const router = express.Router();
 
 const config = require('../config.json');
 
+const { rankGames } = require('../utils/eloCalculator');
+
 const {
 	checkToken,
 	sendError,
 	sendResponse,
 	submitGametoDB,
 	getPlayers,
+	getGames,
 	getStats,
 } = require('../utils/utils');
 
@@ -60,6 +63,15 @@ MongoClient.connect(
 				console.log('\x1b[32m', 'Req: Retrieved all players');
 				sendResponse(res, { status: 200, players });
 			});
+		});
+
+		router.get('/test-elo', checkToken, async (req, res) => {
+			const players = await getPlayers(playersCollection);
+			const games = await getGames(gamesCollection);
+
+			const results = await rankGames(players, games);
+
+			sendResponse(res, { status: 200, results });
 		});
 	}
 );
