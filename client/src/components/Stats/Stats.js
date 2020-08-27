@@ -19,8 +19,6 @@ export default class Stats extends React.Component {
 	}
 
 	render() {
-		let count = 0;
-
 		return (
 			<div className='stats'>
 				<table className='stats__table'>
@@ -35,12 +33,12 @@ export default class Stats extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.stats.map((stat) => {
-							count++;
+						{this.state.stats.map((stat, index) => {
 							return (
-								<tr>
+								<tr key={index}>
 									<td>
-										{count === 1 ? (
+										{index === 0 ? (
+											// eslint-disable-next-line
 											<span role='img'>👑 {stat.name} 👑</span>
 										) : (
 											stat.name
