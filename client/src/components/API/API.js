@@ -13,11 +13,12 @@ export const callApi = async () => {
 // Sends the game results to the server to log in the DB
 export const sendGameReport = async (state) => {
 	const response = await fetch(apiInfo.sendUrl, {
-		method: 'POST',
+		method: 'post',
 		headers: {
 			'Content-Type': 'application/json',
 			token: apiInfo.serverToken,
 		},
+		body: JSON.stringify(state),
 	});
 
 	const body = await response.json();
