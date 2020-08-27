@@ -38,7 +38,9 @@ module.exports = {
 	getStats: async function (gamesCollection, playersCollection) {
 		try {
 			const players = await playersCollection.find().toArray();
-			let games = await gamesCollection.find().toArray();
+			let games = await gamesCollection
+				.find({ date: { $gte: new Date('2020-08-30T00:00:00Z') } })
+				.toArray();
 
 			let stats = [];
 
