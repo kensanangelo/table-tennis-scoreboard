@@ -1,6 +1,5 @@
 exports.checkToken = (req, res, next) => {
-	let token = '';
-	token = req.headers['token'];
+	const token = req.headers['token'];
 
 	if (token === process.env.SERVER_TOKEN) {
 		next();
@@ -9,13 +8,12 @@ exports.checkToken = (req, res, next) => {
 		console.log('\x1b[31m', `REQ REJECTED: BAD TOKEN`);
 		return res
 			.status(401)
-			.json({ status: 'failure', message: 'Bad token. Permission denied' });
+			.json({ status: 'fail', message: 'Bad token. Permission denied' });
 	}
 };
 
 exports.checkClientToken = (req, res, next) => {
-	let token = '';
-	token = req.query.token;
+	const token = req.query.token;
 
 	if (token === process.env.SERVER_TOKEN) {
 		next();
@@ -24,6 +22,6 @@ exports.checkClientToken = (req, res, next) => {
 		console.log('\x1b[31m', `REQ REJECTED: BAD TOKEN`);
 		return res
 			.status(401)
-			.json({ status: 'failure', message: 'Bad token. Permission denied' });
+			.json({ status: 'fail', message: 'Bad token. Permission denied' });
 	}
 };
