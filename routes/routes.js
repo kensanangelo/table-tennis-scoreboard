@@ -19,8 +19,6 @@ router.use(
 router.use('/api', apiRouter);
 
 router.get('/', checkClientToken, function (req, res) {
-	console.log('Req: Client files sent');
-
 	res.sendFile(path.join(__dirname, '..', '/client/build/index.html'));
 });
 

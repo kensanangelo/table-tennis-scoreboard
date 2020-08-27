@@ -48,7 +48,7 @@ router.post('/submit-game', checkToken, (req, res) => {
 				message: `Game saved correctly.`,
 			});
 		} else {
-			console.log('\x1b[31m', `DB ERROR: ${response.errmsg}`);
+			console.error('\x1b[31m', `DB ERROR: ${response.errmsg}`);
 
 			sendError(res, 500, {
 				message: 'DB Insertion Failed. Reason: ' + response.errmsg,
@@ -59,14 +59,12 @@ router.post('/submit-game', checkToken, (req, res) => {
 
 router.get('/get-stats', checkToken, (req, res) => {
 	getStats(gamesCollection, playersCollection).then((games, players) => {
-		console.log('\x1b[32m', 'Req: Retrieved all games');
 		sendResponse(res, { status: 200, games, players });
 	});
 });
 
 router.get('/get-players', checkToken, (req, res) => {
 	getPlayers(playersCollection).then((players) => {
-		console.log('\x1b[32m', 'Req: Retrieved all players');
 		res.send({ status: 'success', data: { players } });
 	});
 });

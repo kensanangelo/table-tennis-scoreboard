@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const morgan = require('morgan');
 
 const router = require('./routes/routes');
 
@@ -9,6 +10,8 @@ global.APP_DIR = __dirname;
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use(morgan('dev'));
 
 app.use('/', router);
 
