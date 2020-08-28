@@ -1,7 +1,3 @@
-function sendError(res, code, data) {
-	res.status(code).send(data);
-}
-
 module.exports = {
 	submitGametoDB: async function (gamesCollection, rawData) {
 		const insertData = {
@@ -115,17 +111,4 @@ module.exports = {
 			return error;
 		}
 	},
-
-	sendResponse: function (res, data) {
-		// Sticks CORS headers on so it can work in dev environment
-		// TODO Maybe delete or auto-hide in production
-		res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-		res.header(
-			'Access-Control-Allow-Headers',
-			'Origin, X-Requested-With, Content-Type, Accept'
-		);
-		res.send(data);
-	},
-
-	sendError: sendError,
 };

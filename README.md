@@ -31,7 +31,6 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ### Refactoring
 
--  Add axios
 -  Switch to Mongoose
 
 ## Bugs

@@ -1,13 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {
-	sendError,
-	sendResponse,
-	submitGametoDB,
-	getPlayers,
-	getStats,
-} = require('../utils/utils');
+const { submitGametoDB, getPlayers, getStats } = require('../utils/utils');
 
 const { checkToken } = require('../middleware/tokenAuth');
 
@@ -40,8 +34,6 @@ router.get('/hello', (req, res) => {
 });
 
 router.post('/game', checkToken, (req, res) => {
-	console.log(req.body);
-
 	submitGametoDB(gamesCollection, req.body)
 		.then((response) => {
 			console.log('\x1b[32m', 'Game saved correctly');
