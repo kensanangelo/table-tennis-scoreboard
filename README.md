@@ -6,18 +6,19 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ## Setup
 
--  You have to run npm install in root and /client separately before using any commands (they have separate node_module folders)
+-  Run `npm run install-all`
 -  To get players, you have to connect to the test DB
--  Create a .env file and put the following code
-   -  `serverToken=102nf238971`
-   -  `connectionString=mongodb+srv://bvAdmin:password@cluster0-4n1y8.mongodb.net/scoreboard?retryWrites=true&w=majority`
+-  Create a .env file in the root and put the following code
+   -  SERVER_TOKEN=102nf238971
+   -  CONNECTION_STRING=mongodb+srv://bvAdmin:<password>@cluster0-4n1y8.mongodb.net/scoreboard?retryWrites=true&w=majority
+   -  CURRENT_SEASON=2
 
 ## Scripts
 
 -  Run `npm start` to start both the react build and server with live reloading
 -  Run `npm run server` to only run the server with live reloading
 -  Run `npm run build` to build the react app for deployment
--  Run `npm run prod` to run the server for the production environment
+-  Run `npm run production` to run the server for the production environment
 
 ## TODO
 
@@ -35,5 +36,6 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ## Bugs
 
--  Win screen image loads in slowly, thus causing pop-in. - Should be preloaded at beginning of game
+-  Win screen image loads in slowly, thus causing pop-in.
+   -  Should be preloaded at beginning of game
    -  (Doesn't matter right now as before and after images are the same)

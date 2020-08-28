@@ -3,6 +3,7 @@
 	"version": "1.1.0",
 	"scripts": {
 		"start": "npm run dev",
+		"install-all": "npm install && cd client && npm install",
 		"client": "cd client && npm start",
 		"build": "cd client && npm run build",
 		"server": "NODE_ENV=development nodemon server.js",
