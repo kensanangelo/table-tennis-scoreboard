@@ -1,13 +1,28 @@
+import axios from 'axios';
 import apiInfo from '../../config';
 
 // Hits API to make sure we are able to reach it
 export const callApi = async () => {
-	const response = await fetch(apiInfo.checkUrl);
-	const body = await response.json();
+	var config = {
+		method: 'get',
+		url: apiInfo.checkUrl,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	};
 
-	if (response.status !== 200) throw Error(body.message);
+	try {
+		const response = await axios(config);
+		const result = response.data;
 
-	return body.msg;
+		if (result.status === 'success') {
+			return result.data.msg;
+		}
+
+		throw 'Cannot connect to server';
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 // Sends the game results to the server to log in the DB

@@ -9,7 +9,7 @@ export default class Scoreboard extends React.Component {
 			gameMode: 'standard',
 			gameState: 'setup',
 			availablePlayers: [],
-			serverStatus: 'CANNOT CONNECT TO API',
+			isServerConnected: false,
 			players: {
 				home: {
 					id: '',
@@ -31,7 +31,7 @@ export default class Scoreboard extends React.Component {
 		// Checks to make sure we can even connect to api
 		// then displays the server message
 		callApi().then((msg) => {
-			newState.serverStatus = msg;
+			newState.isServerConnected = true;
 
 			// If we can connect to server, fetch all players
 			getPlayers().then((availPlayers) => {
@@ -168,8 +168,6 @@ export default class Scoreboard extends React.Component {
 	}
 
 	render() {
-		const isServerConnected = this.state.serverStatus === 'Connected to API';
-
 		return (
 			<div className='setup'>
 				<h1 className='setup__header'>Big Vision</h1>
@@ -280,10 +278,12 @@ export default class Scoreboard extends React.Component {
 				</div>
 				<p
 					className={`setup__server
-						${isServerConnected ? `` : `error-msg`}
+						${this.state.isServerConnected ? `` : `error-msg`}
 					`}
 				>
-					{this.state.serverStatus}
+					{this.state.isServerConnected
+						? 'Connected to API'
+						: 'CANNOT CONNECT TO API'}
 				</p>
 			</div>
 		);

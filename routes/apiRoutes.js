@@ -35,7 +35,8 @@ MongoClient.connect(
 
 router.get('/hello', (req, res) => {
 	//* This is used to hit up the API to make sure it's responding correctly
-	sendResponse(res, { msg: 'API up and running' });
+
+	res.json({ status: 'success', data: { msg: 'API up and running' } });
 });
 
 router.post('/submit-game', checkToken, (req, res) => {
