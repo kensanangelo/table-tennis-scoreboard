@@ -26,12 +26,12 @@ module.exports = {
 		try {
 			const result = await gamesCollection.insertOne(insertData);
 
-			return '200';
+			return 'success';
 		} catch (error) {
 			console.log('\x1b[31m', 'GAME INSERT ERROR:');
 			console.error(error);
 
-			return error;
+			throw error;
 		}
 	},
 

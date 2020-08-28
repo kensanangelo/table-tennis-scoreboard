@@ -3,7 +3,7 @@ import apiInfo from '../../config';
 
 // Hits API to make sure we are able to reach it
 export const callApi = async () => {
-	var config = {
+	const config = {
 		method: 'get',
 		url: apiInfo.checkUrl,
 		headers: {
@@ -27,59 +27,80 @@ export const callApi = async () => {
 
 // Sends the game results to the server to log in the DB
 export const sendGameReport = async (state) => {
-	const response = await fetch(apiInfo.sendUrl, {
+	const data = { ...state };
+	const config = {
 		method: 'post',
+		url: apiInfo.sendUrl,
 		headers: {
 			'Content-Type': 'application/json',
 			token: apiInfo.serverToken,
 		},
-		body: JSON.stringify(state),
-	});
+		data,
+	};
 
-	const body = await response.json();
+	try {
+		const response = await axios(config);
+		const result = response.data;
 
-	if (response.status !== 200) throw Error(body.message);
-
-	return body.message;
+		if (result.status === 'success') {
+			return result.data.data.msg;
+		} else {
+			console.error(result.data.message);
+			alert('COULD NOT SEND GAME TO SERVER');
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 // Gets all available players
 export const getPlayers = async () => {
-	const response = await fetch(apiInfo.playersUrl, {
+	const config = {
 		method: 'get',
+		url: apiInfo.playersUrl,
 		headers: {
 			'Content-Type': 'application/json',
 			token: apiInfo.serverToken,
 		},
-	});
+	};
 
-	if (response.ok) {
-		const body = await response.json();
+	try {
+		const response = await axios(config);
+		const result = response.data;
 
-		if (response.status !== 200) console.log(body.message);
-
-		return body.data.players;
-	} else {
-		console.log(`Error: ${response.statusText}`);
+		if (result.status === 'success') {
+			return result.data.players;
+		} else {
+			console.error(result.data.message);
+			alert('COULD NOT GET PLAYERS');
+		}
+	} catch (error) {
+		console.log(error);
 	}
 };
 
 // Gets all games
 export const getStats = async () => {
-	const response = await fetch(apiInfo.statsUrl, {
+	const config = {
 		method: 'get',
+		url: apiInfo.statsUrl,
 		headers: {
 			'Content-Type': 'application/json',
 			token: apiInfo.serverToken,
 		},
-	});
+	};
 
-	if (response.ok) {
-		const body = await response.json();
+	try {
+		const response = await axios(config);
+		const result = response.data;
 
-		if (response.status !== 200) console.log(body.message);
-		return body.games;
-	} else {
-		console.log(`Error: ${response.statusText}`);
+		if (result.status === 'success') {
+			return result.data.games;
+		} else {
+			console.error(result.message);
+			alert('COULD NOT SEND GAME TO SERVER');
+		}
+	} catch (error) {
+		console.log(error);
 	}
 };

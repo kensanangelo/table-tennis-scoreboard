@@ -39,32 +39,35 @@ router.get('/hello', (req, res) => {
 	res.json({ status: 'success', data: { msg: 'API up and running' } });
 });
 
-router.post('/submit-game', checkToken, (req, res) => {
-	submitGametoDB(gamesCollection, req.body).then((response) => {
-		if (response === '200') {
+router.post('/game', checkToken, (req, res) => {
+	console.log(req.body);
+
+	submitGametoDB(gamesCollection, req.body)
+		.then((response) => {
 			console.log('\x1b[32m', 'Game saved correctly');
 
-			sendResponse(res, {
-				status: 200,
-				message: `Game saved correctly.`,
+			res.json({
+				status: 'success',
+				data: { message: `Game saved correctly.` },
 			});
-		} else {
-			console.error('\x1b[31m', `DB ERROR: ${response.errmsg}`);
+		})
+		.catch((err) => {
+			console.error('\x1b[31m', `DB ERROR: ${err}`);
 
-			sendError(res, 500, {
-				message: 'DB Insertion Failed. Reason: ' + response.errmsg,
+			res.status(500).json({
+				status: 'error',
+				message: 'DB Insertion Failed. Reason: ' + err,
 			});
-		}
-	});
+		});
 });
 
-router.get('/get-stats', checkToken, (req, res) => {
+router.get('/stats', checkToken, (req, res) => {
 	getStats(gamesCollection, playersCollection).then((games, players) => {
-		sendResponse(res, { status: 200, games, players });
+		res.send({ status: 'success', data: { games, players } });
 	});
 });
 
-router.get('/get-players', checkToken, (req, res) => {
+router.get('/players', checkToken, (req, res) => {
 	getPlayers(playersCollection).then((players) => {
 		res.send({ status: 'success', data: { players } });
 	});
