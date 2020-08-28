@@ -11,10 +11,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 //Sets static folder public so client can access js and css files
-router.use(
-	'/',
-	express.static(path.join(__dirname, '..', '/client/build/static'))
-);
+router.use('/', express.static(path.join(__dirname, '..', '/client/build')));
 
 router.use('/api', apiRouter);
 
