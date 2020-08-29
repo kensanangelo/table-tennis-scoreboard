@@ -59,10 +59,10 @@ router.post('/games', checkToken, (req, res) => {
 // 	});
 // });
 
-// router.get('/players', checkToken, (req, res) => {
-// 	getPlayers(playersCollection).then((players) => {
-// 		res.send({ status: 'success', data: { players } });
-// 	});
-// });
+router.get('/players', checkToken, (req, res) => {
+	getPlayers().then((players) => {
+		res.send({ status: 'success', data: { players } });
+	});
+});
 
 module.exports = router;

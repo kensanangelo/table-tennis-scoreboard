@@ -1,4 +1,5 @@
 const GameModel = require('../models/Game');
+const PlayerModel = require('../models/Player');
 
 module.exports = {
 	submitGametoDB: async function (rawData) {
@@ -101,9 +102,9 @@ module.exports = {
 		}
 	},
 
-	getPlayers: async function (playersCollection) {
+	getPlayers: async function () {
 		try {
-			const players = await playersCollection.find().toArray();
+			const players = await PlayerModel.find().lean();
 
 			return players;
 		} catch (error) {
