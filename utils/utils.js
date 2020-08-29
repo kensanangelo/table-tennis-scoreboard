@@ -34,10 +34,10 @@ module.exports = {
 		}
 	},
 
-	getStats: async function (gamesCollection, playersCollection) {
+	getStats: async function () {
 		try {
-			const players = await playersCollection.find().toArray();
-			let games = await gamesCollection.find().toArray();
+			const players = await PlayerModel.find().lean();
+			let games = await GameModel.find().lean();
 
 			let stats = [];
 

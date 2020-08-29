@@ -4,6 +4,7 @@ const router = express.Router();
 const { submitGametoDB, getPlayers, getStats } = require('../utils/utils');
 
 const { checkToken } = require('../middleware/tokenAuth');
+const app = require('../app');
 
 // let db;
 // let playersCollection;
@@ -33,7 +34,10 @@ router.get('/hello', (req, res) => {
 	res.json({ status: 'success', data: { msg: 'API up and running' } });
 });
 
-router.post('/games', checkToken, (req, res) => {
+router.use(checkToken);
+// Everything below here requires a token
+
+router.post('/games', (req, res) => {
 	submitGametoDB(req.body)
 		.then((response) => {
 			console.log('\x1b[32m', 'Game saved correctly');
@@ -53,13 +57,13 @@ router.post('/games', checkToken, (req, res) => {
 		});
 });
 
-// router.get('/stats', checkToken, (req, res) => {
-// 	getStats(gamesCollection, playersCollection).then((games, players) => {
-// 		res.send({ status: 'success', data: { games, players } });
-// 	});
-// });
+router.get('/stats', (req, res) => {
+	getStats().then((games, players) => {
+		res.send({ status: 'success', data: { games, players } });
+	});
+});
 
-router.get('/players', checkToken, (req, res) => {
+router.get('/players', (req, res) => {
 	getPlayers().then((players) => {
 		res.send({ status: 'success', data: { players } });
 	});
