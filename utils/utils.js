@@ -1,5 +1,7 @@
+const GameModel = require('../models/Game');
+
 module.exports = {
-	submitGametoDB: async function (gamesCollection, rawData) {
+	submitGametoDB: async function (rawData) {
 		const insertData = {
 			plays: rawData.plays,
 			date: new Date(),
@@ -20,7 +22,7 @@ module.exports = {
 		};
 
 		try {
-			const result = await gamesCollection.insertOne(insertData);
+			const result = await GameModel.create(insertData);
 
 			return 'success';
 		} catch (error) {

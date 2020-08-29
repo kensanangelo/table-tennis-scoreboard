@@ -5,9 +5,9 @@ const { submitGametoDB, getPlayers, getStats } = require('../utils/utils');
 
 const { checkToken } = require('../middleware/tokenAuth');
 
-let db;
-let playersCollection;
-let gamesCollection;
+// let db;
+// let playersCollection;
+// let gamesCollection;
 
 // // Connects to DB
 // //* All of the API calls that need the DB go in here
@@ -33,25 +33,25 @@ router.get('/hello', (req, res) => {
 	res.json({ status: 'success', data: { msg: 'API up and running' } });
 });
 
-// router.post('/game', checkToken, (req, res) => {
-// 	submitGametoDB(gamesCollection, req.body)
-// 		.then((response) => {
-// 			console.log('\x1b[32m', 'Game saved correctly');
+router.post('/games', checkToken, (req, res) => {
+	submitGametoDB(req.body)
+		.then((response) => {
+			console.log('\x1b[32m', 'Game saved correctly');
 
-// 			res.json({
-// 				status: 'success',
-// 				data: { message: `Game saved correctly.` },
-// 			});
-// 		})
-// 		.catch((err) => {
-// 			console.error('\x1b[31m', `DB ERROR: ${err}`);
+			res.json({
+				status: 'success',
+				data: { message: `Game saved correctly.` },
+			});
+		})
+		.catch((err) => {
+			console.error('\x1b[31m', `DB ERROR: ${err}`);
 
-// 			res.status(500).json({
-// 				status: 'error',
-// 				message: 'DB Insertion Failed. Reason: ' + err,
-// 			});
-// 		});
-// });
+			res.status(500).json({
+				status: 'error',
+				message: 'DB Insertion Failed. Reason: ' + err,
+			});
+		});
+});
 
 // router.get('/stats', checkToken, (req, res) => {
 // 	getStats(gamesCollection, playersCollection).then((games, players) => {
