@@ -37,7 +37,10 @@ module.exports = {
 	getStats: async function () {
 		try {
 			const players = await PlayerModel.find().lean();
-			let games = await GameModel.find().lean();
+
+			let games = await GameModel.find({
+				date: { $gte: new Date('2020-08-30T00:00:00Z') },
+			}).lean();
 
 			let stats = [];
 
