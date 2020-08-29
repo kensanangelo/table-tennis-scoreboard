@@ -32,8 +32,6 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ### Refactoring
 
--  Switch to Mongoose
-
 ## Bugs
 
 -  Win screen image loads in slowly, thus causing pop-in.
