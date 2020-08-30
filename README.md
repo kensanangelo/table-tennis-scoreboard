@@ -32,6 +32,9 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ### Refactoring
 
+-  Use DB \_id for tracking players instead of a dedicated player_id in games
+-  Also write a script to convert all current games in DB using player_id to \_id
+
 ## Bugs
 
 -  Win screen image loads in slowly, thus causing pop-in.
