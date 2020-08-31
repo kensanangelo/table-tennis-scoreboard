@@ -6,7 +6,7 @@ const router = require('./routes/routes');
 const app = express();
 const database = require('./utils/dbConnector');
 
-app.use(morgan('dev'));
+app.use(morgan('common'));
 
 app.use('/', router);
 
