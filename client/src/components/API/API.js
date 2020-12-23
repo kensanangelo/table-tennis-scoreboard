@@ -1,14 +1,16 @@
 import axios from 'axios';
-import apiInfo from '../../config';
+
+const headers = {
+	'Content-Type': 'application/json',
+	token: process.env.REACT_APP_SERVER_TOKEN,
+};
 
 // Hits API to make sure we are able to reach it
 export const callApi = async () => {
 	const config = {
 		method: 'get',
-		url: apiInfo.checkUrl,
-		headers: {
-			'Content-Type': 'application/json',
-		},
+		url: process.env.REACT_APP_SERVER_URL + '/hello',
+		headers: headers,
 	};
 
 	try {
@@ -30,11 +32,8 @@ export const sendGameReport = async (state) => {
 	const data = { ...state };
 	const config = {
 		method: 'post',
-		url: apiInfo.sendUrl,
-		headers: {
-			'Content-Type': 'application/json',
-			token: apiInfo.serverToken,
-		},
+		url: process.env.REACT_APP_SERVER_URL + '/games',
+		headers: headers,
 		data,
 	};
 
@@ -57,11 +56,8 @@ export const sendGameReport = async (state) => {
 export const getPlayers = async () => {
 	const config = {
 		method: 'get',
-		url: apiInfo.playersUrl,
-		headers: {
-			'Content-Type': 'application/json',
-			token: apiInfo.serverToken,
-		},
+		url: process.env.REACT_APP_SERVER_URL + '/players',
+		headers: headers,
 	};
 
 	try {
@@ -83,11 +79,8 @@ export const getPlayers = async () => {
 export const getStats = async () => {
 	const config = {
 		method: 'get',
-		url: apiInfo.statsUrl,
-		headers: {
-			'Content-Type': 'application/json',
-			token: apiInfo.serverToken,
-		},
+		url: process.env.REACT_APP_SERVER_URL + '/stats',
+		headers: headers,
 	};
 
 	try {
@@ -95,10 +88,33 @@ export const getStats = async () => {
 		const result = response.data;
 
 		if (result.status === 'success') {
-			return result.data.games;
+			return result.data.stats;
 		} else {
 			console.error(result.message);
-			alert('COULD NOT SEND GAME TO SERVER');
+			alert('COULD NOT GET STATS FROM TO SERVER');
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const getWinChances = async (homeElo, awayElo) => {
+	const config = {
+		method: 'get',
+		url: process.env.REACT_APP_SERVER_URL + '/chances-of-winning',
+		params: { homeElo, awayElo },
+		headers: headers,
+	};
+
+	try {
+		const response = await axios(config);
+		const result = response.data;
+
+		if (result.status === 'success') {
+			return result.data.stats;
+		} else {
+			console.error(result.message);
+			alert('COULD NOT GET STATS FROM TO SERVER');
 		}
 	} catch (error) {
 		console.log(error);

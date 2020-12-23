@@ -1,32 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { submitGametoDB, getPlayers, getStats } = require('../utils/utils');
+const { submitGametoDB, getPlayers, getStats } = require('../utils');
+const { calculateWinChance } = require('../utils/eloCalculator');
 
 const { checkToken } = require('../middleware/tokenAuth');
-const app = require('../app');
 
-// let db;
-// let playersCollection;
-// let gamesCollection;
-
-// // Connects to DB
-// //* All of the API calls that need the DB go in here
-// const MongoClient = require('mongodb').MongoClient;
-// MongoClient.connect(
-// 	process.env.CONNECTION_STRING,
-// 	{
-// 		useUnifiedTopology: true,
-// 	},
-// 	(err, client) => {
-// 		if (err) return console.error(err);
-// 		console.log('\x1b[44m\x1b[37m', 'Connected to Database', '\x1b[0m\n');
-
-// 		db = client.db('scoreboard');
-// 		playersCollection = db.collection('players');
-// 		gamesCollection = db.collection('games');
-// 	}
-// );
+// Everything below here requires a token
+router.use(checkToken);
 
 router.get('/hello', (req, res) => {
 	//* This is used to hit up the API to make sure it's responding correctly
@@ -34,9 +15,7 @@ router.get('/hello', (req, res) => {
 	res.json({ status: 'success', data: { msg: 'API up and running' } });
 });
 
-router.use(checkToken);
-// Everything below here requires a token
-
+// Submit a game to the DB, once it's over
 router.post('/games', (req, res) => {
 	submitGametoDB(req.body)
 		.then((response) => {
@@ -57,16 +36,51 @@ router.post('/games', (req, res) => {
 		});
 });
 
-router.get('/stats', (req, res) => {
-	getStats().then((games, players) => {
-		res.send({ status: 'success', data: { games, players } });
-	});
+// Get all the stats for all players
+router.get('/stats', async (req, res) => {
+	try {
+		const stats = await getStats();
+
+		res.send({ status: 'success', data: { stats } });
+	} catch (err) {
+		console.error('GET STATS FAILED:');
+		console.error(err);
+		next(err);
+	}
 });
 
-router.get('/players', (req, res) => {
-	getPlayers().then((players) => {
+// Gets all the players for the select screen
+router.get('/players', async (req, res) => {
+	try {
+		const players = await getPlayers();
+
 		res.send({ status: 'success', data: { players } });
-	});
+	} catch (err) {
+		console.error('GET PLAYERS FAILED:');
+		console.error(err);
+		next(err);
+	}
+});
+
+// Calculates the chances of winning for 2 players
+router.get('/chances-of-winning', (req, res) => {
+	console.log(req.query);
+	const { homeElo, awayElo } = req.query;
+
+	const homeWinChance = calculateWinChance(
+		parseInt(homeElo),
+		parseInt(awayElo)
+	);
+
+	const awayWinChance = calculateWinChance(
+		parseInt(awayElo),
+		parseInt(homeElo)
+	);
+
+	console.log('winChance: ', winChance);
+	console.log('loseChance: ', loseChance);
+
+	res.json({ status: 'success', data: { homeWinChance, awayWinChance } });
 });
 
 module.exports = router;

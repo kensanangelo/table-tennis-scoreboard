@@ -3,7 +3,7 @@ let mongoose = require('mongoose');
 let playerSchema = new mongoose.Schema({
 	player_id: String,
 	name: String,
-	elo: {
+	eloScore: {
 		type: Number,
 		default: 1200,
 	},

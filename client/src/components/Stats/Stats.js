@@ -11,10 +11,8 @@ export default class Stats extends React.Component {
 	}
 
 	componentDidMount() {
-		callApi().then((msg) => {
-			getStats().then((stats) => {
-				this.setState({ stats });
-			});
+		getStats().then((stats) => {
+			this.setState({ stats });
 		});
 	}
 

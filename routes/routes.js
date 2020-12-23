@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 
 const apiRouter = require('./apiRoutes');
+const testRouter = require('./testRoutes');
 
 const { checkClientToken } = require('../middleware/tokenAuth');
 
@@ -14,6 +15,10 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use('/', express.static(path.join(__dirname, '..', '/client/build')));
 
 router.use('/api', apiRouter);
+
+if (process.env.NODE_ENV === 'development') {
+	router.use('/test', testRouter);
+}
 
 router.get('/', checkClientToken, function (req, res) {
 	res.sendFile(path.join(__dirname, '..', '/client/build/index.html'));
