@@ -111,7 +111,7 @@ export const getWinChances = async (homeElo, awayElo) => {
 		const result = response.data;
 
 		if (result.status === 'success') {
-			return result.data.stats;
+			return result.data;
 		} else {
 			console.error(result.message);
 			alert('COULD NOT GET STATS FROM TO SERVER');

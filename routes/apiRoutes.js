@@ -77,8 +77,8 @@ router.get('/chances-of-winning', (req, res) => {
 		parseInt(homeElo)
 	);
 
-	console.log('winChance: ', winChance);
-	console.log('loseChance: ', loseChance);
+	console.log('homeWinChance: ', homeWinChance);
+	console.log('awayWinChance: ', awayWinChance);
 
 	res.json({ status: 'success', data: { homeWinChance, awayWinChance } });
 });

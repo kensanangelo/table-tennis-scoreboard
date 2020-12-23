@@ -1,5 +1,5 @@
 import React from 'react';
-import { callApi, getStats } from '../API/API';
+import { getStats } from '../API/API';
 
 export default class Stats extends React.Component {
 	constructor(props) {
