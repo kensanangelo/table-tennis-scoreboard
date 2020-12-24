@@ -18,7 +18,6 @@ router.get('/hello', (req, res) => {
 
 // Submit a game to the DB, once it's over
 router.post('/games', async (req, res) => {
-	console.log(req.body);
 	const { home, away, winner } = req.body;
 
 	try {

@@ -85,6 +85,7 @@ module.exports = {
 				stats.push({
 					player_id: player.player_id,
 					name: player.name,
+					elo: player.eloScore,
 					wins: wins,
 					losses: losses,
 					winrate: winrate,
@@ -94,7 +95,8 @@ module.exports = {
 			});
 
 			stats.sort((a, b) => {
-				return b.winrate - a.winrate;
+				//return b.winrate - a.winrate; // Sorting by winrate
+				return b.elo - a.elo; // Sorting by elo score
 			});
 
 			return stats;
@@ -141,10 +143,6 @@ module.exports = {
 				newElo = calculateEloForLose(playerOldEloInt, opponentOldEloInt);
 			}
 
-			console.log('playerId: ', playerId);
-
-			console.log('newElo: ', newElo);
-
 			if (newElo) {
 				await PlayerModel.findOneAndUpdate(
 					{ player_id: playerId },
@@ -152,7 +150,6 @@ module.exports = {
 				);
 			} else {
 				console.log('NO NEW ELO');
-
 				throw 'Unable to calculate new elo';
 			}
 		} catch (err) {

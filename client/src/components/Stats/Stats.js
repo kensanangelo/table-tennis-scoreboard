@@ -23,6 +23,7 @@ export default class Stats extends React.Component {
 					<thead>
 						<tr>
 							<th>Player</th>
+							<th>Elo Score</th>
 							<th>Wins</th>
 							<th>Losses</th>
 							<th>Winrate</th>
@@ -42,6 +43,7 @@ export default class Stats extends React.Component {
 											stat.name
 										)}
 									</td>
+									<td>{stat.elo}</td>
 									<td>{stat.wins}</td>
 									<td>{stat.losses}</td>
 									<td>{stat.winrate}%</td>
