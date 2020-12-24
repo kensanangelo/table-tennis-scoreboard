@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { submitGametoDB, getPlayers, getStats } = require('../utils');
 const { calculateWinChance } = require('../utils/eloCalculator');
+const { updatePlayerElo } = require('../utils');
 
 const { checkToken } = require('../middleware/tokenAuth');
 
@@ -16,24 +17,45 @@ router.get('/hello', (req, res) => {
 });
 
 // Submit a game to the DB, once it's over
-router.post('/games', (req, res) => {
-	submitGametoDB(req.body)
-		.then((response) => {
-			console.log('\x1b[32m', 'Game saved correctly');
+router.post('/games', async (req, res) => {
+	console.log(req.body);
+	const { home, away, winner } = req.body;
 
-			res.json({
-				status: 'success',
-				data: { message: `Game saved correctly.` },
-			});
-		})
-		.catch((err) => {
-			console.error('\x1b[31m', `DB ERROR: ${err}`);
+	try {
+		await submitGametoDB(req.body);
 
-			res.status(500).json({
-				status: 'error',
-				message: 'DB Insertion Failed. Reason: ' + err,
-			});
+		let didHomeWin = null;
+		let didAwayWin = null;
+
+		if (winner.id === home.id) {
+			didHomeWin = true;
+			didAwayWin = false;
+		} else if (winner.id === away.id) {
+			didHomeWin = false;
+			didAwayWin = true;
+		}
+
+		if (didHomeWin == null || didAwayWin == null)
+			throw new Error('Did not have a winner');
+
+		await updatePlayerElo(home.id, home.eloRank, away.eloRank, didHomeWin);
+
+		await updatePlayerElo(away.id, away.eloRank, home.eloRank, didAwayWin);
+
+		console.log('\x1b[32m', 'Game saved correctly');
+
+		res.json({
+			status: 'success',
+			data: { message: `Game saved correctly.` },
 		});
+	} catch (err) {
+		console.error('\x1b[31m', `DB ERROR: ${err}`);
+
+		res.status(500).json({
+			status: 'error',
+			message: 'DB Insertion Failed. Reason: ' + err,
+		});
+	}
 });
 
 // Get all the stats for all players
@@ -64,21 +86,14 @@ router.get('/players', async (req, res) => {
 
 // Calculates the chances of winning for 2 players
 router.get('/chances-of-winning', (req, res) => {
-	console.log(req.query);
 	const { homeElo, awayElo } = req.query;
 
-	const homeWinChance = calculateWinChance(
-		parseInt(homeElo),
-		parseInt(awayElo)
-	);
+	const homeEloInt = parseInt(homeElo);
+	const awayEloInt = parseInt(awayElo);
 
-	const awayWinChance = calculateWinChance(
-		parseInt(awayElo),
-		parseInt(homeElo)
-	);
+	const homeWinChance = calculateWinChance(homeEloInt, awayEloInt);
 
-	console.log('homeWinChance: ', homeWinChance);
-	console.log('awayWinChance: ', awayWinChance);
+	const awayWinChance = calculateWinChance(awayEloInt, homeEloInt);
 
 	res.json({ status: 'success', data: { homeWinChance, awayWinChance } });
 });

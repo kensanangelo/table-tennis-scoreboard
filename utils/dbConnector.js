@@ -10,6 +10,7 @@ class Database {
 			.connect(process.env.CONNECTION_STRING, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
+				useFindAndModify: true,
 			})
 			.then(() => {
 				console.log(

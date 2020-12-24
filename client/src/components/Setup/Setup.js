@@ -191,11 +191,13 @@ export default class Scoreboard extends React.Component {
 				home: {
 					id: curState.players.home.id,
 					name: curState.players.home.name,
+					eloScore: curState.players.home.eloScore,
 					isServing: curState.players.home.isServing,
 				},
 				away: {
 					id: curState.players.away.id,
 					name: curState.players.away.name,
+					eloScore: curState.players.away.eloScore,
 					isServing: curState.players.away.isServing,
 				},
 			},

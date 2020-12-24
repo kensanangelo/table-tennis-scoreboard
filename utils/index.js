@@ -1,5 +1,6 @@
 const GameModel = require('../models/Game');
 const PlayerModel = require('../models/Player');
+const { calculateEloForWin, calculateEloForLose } = require('./eloCalculator');
 
 module.exports = {
 	submitGametoDB: async function (rawData) {
@@ -115,6 +116,48 @@ module.exports = {
 			console.error(error);
 
 			return error;
+		}
+	},
+
+	/**
+	 * @param {String} playerId - The id for the player to be updated
+	 * @param {Number} playerOldElo
+	 * @param {Number} opponentOldElo
+	 */
+	updatePlayerElo: async function (
+		playerId,
+		playerOldElo,
+		opponentOldElo,
+		didWin
+	) {
+		try {
+			const playerOldEloInt = parseInt(playerOldElo);
+			const opponentOldEloInt = parseInt(opponentOldElo);
+			let newElo = null;
+
+			if (didWin) {
+				newElo = calculateEloForWin(playerOldEloInt, opponentOldEloInt);
+			} else {
+				newElo = calculateEloForLose(playerOldEloInt, opponentOldEloInt);
+			}
+
+			console.log('playerId: ', playerId);
+
+			console.log('newElo: ', newElo);
+
+			if (newElo) {
+				await PlayerModel.findOneAndUpdate(
+					{ player_id: playerId },
+					{ eloScore: newElo }
+				);
+			} else {
+				console.log('NO NEW ELO');
+
+				throw 'Unable to calculate new elo';
+			}
+		} catch (err) {
+			console.error(err);
+			throw new Error('Unable to calculate new elo');
 		}
 	},
 };

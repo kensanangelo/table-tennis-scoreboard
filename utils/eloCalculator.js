@@ -14,3 +14,15 @@ exports.calculateWinChance = (playerScore, opponentScore) => {
 	const resultsPercent = Math.round(oddsPlayerWins * 100).toFixed();
 	return resultsPercent + '%';
 };
+
+exports.calculateEloForWin = (playerScore, opponentScore) => {
+	const odds_player_won = elo.expectedScore(playerScore, opponentScore);
+	const newPlayerElo = elo.newRating(odds_player_won, 1, playerScore);
+	return newPlayerElo;
+};
+
+exports.calculateEloForLose = (playerScore, opponentScore) => {
+	const odds_player_won = elo.expectedScore(playerScore, opponentScore);
+	const newPlayerElo = elo.newRating(odds_player_won, 0, playerScore);
+	return newPlayerElo;
+};
