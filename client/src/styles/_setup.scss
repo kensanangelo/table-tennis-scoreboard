@@ -5,14 +5,12 @@
 	align-items: stretch;
 
 	&__header {
-		font-family: "Junius Irish";
 		font-size: 96px;
 		font-weight: 600;
 		text-transform: uppercase;
 	}
 
 	&__subheader {
-		font-family: "Junius Irish";
 		font-size: 36px;
 		font-weight: 600;
 		text-transform: uppercase;
@@ -64,11 +62,11 @@
 	}
 
 	&__player-chance {
+		color: $black;
 		position: absolute;
 		top: -2rem;
 		left: 50%;
 		transform: translateX(-50%);
-		color: $black;
 	}
 
 	&__player--home &__player-chance {
