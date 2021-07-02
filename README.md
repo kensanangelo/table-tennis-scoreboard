@@ -22,12 +22,12 @@ Built on the MERN stack, the client files will be run on a small computer on the
 
 ## TODO
 
+-  Add ability to archived people who don't play anymore. Keep them in db for historical analysis
 -  Who's serving should be next screen after setup (can be selected with paddles)
 -  Add to game start screen - Show last 3/5/10 games somewhere - How many points to win & serving switch amount?
 -  Maybe a way to modify scores in game if someone messes up
 -  Add stats analysis/graphs/charts
 -  Give the ability to look through past seasons on Leaderboard
--  Implement ranking system - Probably going to use ELO using this node package - Starting ranking will probably be 1200 - https://github.com/tlhunter/node-arpad
 -  Prevent double taps on the peddle buttons. Maybe set a timeout or a rate limit so a peddle can't register clicks more than once per 5 seconds.
 
 ### Refactoring
