@@ -1,8 +1,6 @@
 import React from 'react';
 import ScoreCard from './ScoreCard';
 import { sendGameReport } from '../API/API';
-//import logo from '../../img/bv.svg';
-import { ReactComponent as Logo } from '../../img/bv.svg';
 
 export default class Scoreboard extends React.Component {
 	constructor(props) {
@@ -212,7 +210,6 @@ export default class Scoreboard extends React.Component {
 				>
 					Quit Match
 				</button>
-				<Logo className='scoreboard__logo' />
 			</div>
 		);
 	}

@@ -1,17 +1,19 @@
-# BV Scoreboard
+# Table Tennis Scoreboard
 
 ## About
 
-Built on the MERN stack, the client files will be run on a small computer on the TV next to the ping pong table to track games. The server will be run as an API the local files connect to. 2 USB paddle buttons will be mapped to Z and P for each player, and a mouse will be used to set up the game.
+This is a scoreboard for playing table tennis. It tracks individual players, their games and displays a leaderboard (using ELO ranking). The keys Z and P are mapped to each player, and the intention is for 2 USB paddles to be set up on either side of the table set to those keys, so the players can input when they score a point without leaving the table.
+
+> Technical details: Built on the MERN stack, the client files will be run on a small computer on the TV next to the ping pong table to track games. The server will be run as an API the local files connect to. 2 USB paddle buttons will be mapped to Z and P for each player, and a mouse will be used to set up the game. The way it is set up now, you will need a db on MongoDB Atlas to host the data.
 
 ## Setup
 
 -  Run `npm run install-all`
 -  To get players, you have to connect to the test DB
--  Create a .env file in the root and put the following code
-   -  SERVER_TOKEN="_Any string_"
-   -  CONNECTION_STRING="_Mongo DB url string_"
-   -  CURRENT_SEASON=1
+-  Create a .env file in the root and put the following lines:
+   -  `SERVER_TOKEN=*Any randomized string*`
+   -  `CONNECTION_STRING=*Mongo DB url string*`
+   -  `CURRENT_SEASON=1`
 
 ## Scripts
 
@@ -29,11 +31,8 @@ Built on the MERN stack, the client files will be run on a small computer on the
 -  Add stats analysis/graphs/charts
 -  Give the ability to look through past seasons on Leaderboard
 -  Prevent double taps on the peddle buttons. Maybe set a timeout or a rate limit so a peddle can't register clicks more than once per 5 seconds.
-
-### Refactoring
-
 -  Use DB \_id for tracking players instead of a dedicated player_id in games
--  Also write a script to convert all current games in DB using player_id to \_id
+-  Write a script to convert all current games in DB using player_id to \_id
 
 ## Bugs
 
