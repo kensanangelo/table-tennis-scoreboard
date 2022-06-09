@@ -9,9 +9,9 @@ Built on the MERN stack, the client files will be run on a small computer on the
 -  Run `npm run install-all`
 -  To get players, you have to connect to the test DB
 -  Create a .env file in the root and put the following code
-   -  SERVER_TOKEN=102nf238971
-   -  CONNECTION_STRING=mongodb+srv://bvAdmin:<password>@cluster0-4n1y8.mongodb.net/scoreboard?retryWrites=true&w=majority
-   -  CURRENT_SEASON=2
+   -  SERVER_TOKEN="_Any string_"
+   -  CONNECTION_STRING="_Mongo DB url string_"
+   -  CURRENT_SEASON=1
 
 ## Scripts
 

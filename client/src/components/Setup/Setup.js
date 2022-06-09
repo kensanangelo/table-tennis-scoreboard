@@ -223,7 +223,7 @@ export default class Scoreboard extends React.Component {
 	render() {
 		return (
 			<div className='setup'>
-				<h1 className='setup__header'>Big Vision</h1>
+				<h1 className='setup__header'>Scoreboard</h1>
 				<h2 className='setup__subheader'>Table Tennis League</h2>
 				<div className='setup__players'>
 					<div className='setup__player setup__player--home'>
